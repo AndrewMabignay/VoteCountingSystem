@@ -29,3 +29,5 @@ JOIN (
     FROM candidates
     GROUP BY Position
 ) m ON c.Position = m.Position AND c.VoteCount = m.MaxVotes;
+
+SELECT * FROM candidates c JOIN (SELECT Position, MAX(VoteCount) AS MaxVotes FROM candidates GROUP BY Position) m ON c.Position = m.Position AND c.VoteCount = m.MaxVotes;

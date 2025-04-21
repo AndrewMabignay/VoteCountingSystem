@@ -130,6 +130,24 @@ class Model {
         return $rows;
     }
 
+    // ADMIN | RESULT
+    public function candidateVoteResult() {
+        global $conn;
+
+        $this->query = "SELECT * FROM {$this->databaseTable} c JOIN (SELECT Position, MAX(VoteCount) AS MaxVotes FROM {$this->databaseTable} GROUP BY Position) m ON c.Position = m.Position AND c.VoteCount = m.MaxVotes";
+        $retrieve = \mysqli_query($conn, $this->query);
+
+        $rows = [];
+
+        if ($retrieve && mysqli_num_rows($retrieve) > 0) {
+            while ($row = mysqli_fetch_assoc($retrieve)) {
+                $rows[] = $row;
+            }
+        } 
+
+        return $rows;
+    }
+
     // USER | STANDARD LIST
     public function updateCandidatesVote($id, $voteCount) {
         global $conn;
