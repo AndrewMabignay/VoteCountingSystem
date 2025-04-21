@@ -1,0 +1,315 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+:root {
+    --color-one-body: #F8FAFC;                   /* Light neutral background */
+    --color-two-card-template: #FFFFFF;          /* Clean card base */
+    --color-three-border: #CBD5E1;               /* Soft gray border */
+    --color-accent-primary: #4F46E5;             /* Vivid Blue (Voting CTA) */
+    --color-accent-hover: #4338CA;               /* Hover state */
+    --font-family-one: 'Poppins', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-family-one);
+}
+
+body {
+    background: var(--color-one-body);
+    height: 100vh;
+    padding: 20px 0px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ================ 1. NAVIGATION SIDEBAR ================ */
+nav {
+    background: var(--color-two-card-template);
+    width: 250px;
+    height: 100%;
+    margin: 40px;
+    padding: 24px 0px;
+
+    border: 1px solid var(--color-three-border);
+    border-radius: 12px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); /* Subtle depth */
+}
+
+nav :where(form) {
+    padding: 0px 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+nav :where(form) :where(button) {
+    color: #FFFFFF;
+    background: var(--color-accent-primary);
+    height: 45px;
+    width: 100%;
+    padding: 0px 20px;
+    font-size: 14px;
+
+    border: none;
+    border-radius: 8px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+nav :where(form) :where(button:hover) {
+    background: var(--color-accent-hover);
+}
+
+nav :where(form) :where(hr) {
+    border: 1px solid #E2E8F0;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+
+/* ================ 2. DASHBOARD ================ */
+.container {
+    /* background: var(--color-two-card-template); */
+    width: 75%;
+    height: 100%;
+    margin: 0px 50px 0px 0px;
+
+    /* border: 1px solid var(--color-three-border); */
+    border-radius: 12px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    /* box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); Subtle depth */
+}
+
+.container :where(.dashboard-header) {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.container :where(.dashboard-header) :where(h1) {
+    background: var(--color-two-card-template);
+    color: #0F172A;
+    width: 100%;
+    height: 60px;
+    padding: 0px 35px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+
+    border: 1px solid var(--color-three-border);
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+}
+
+.container :where(.dashboard-container) {
+    height: 100%;
+    margin-top: 30px;
+    padding: 25px 0px;
+    background: var(--color-two-card-template);
+
+    border: 1px solid var(--color-three-border);
+    border-radius: 12px;
+
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); /* Subtle depth */
+}
+
+.container :where(.dashboard-container) :where(.add-candidate) {
+    padding: 0px 40px;
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+} 
+
+.container :where(.dashboard-container) :where(.add-candidate) :where(.input-container) {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.container :where(.dashboard-container) :where(.add-candidate) :where(.input-container) :where(label) {
+    font-size: 14px;
+} 
+
+.container :where(.dashboard-container) :where(.add-candidate) :where(.input-container) :where(input) {
+    height: 35px;
+    width: 200px;
+    padding: 0px 10px;
+
+    border: 1px solid lightslategrey;
+    border-radius: 6px;
+}
+
+.container :where(.dashboard-container) :where(.add-candidate) :where(.button-container) {
+    display: flex;
+    gap: 10px;
+}
+
+.container :where(.dashboard-container) :where(.add-candidate) :where(.button-container) :where(button) {
+    background: #10B981;
+    color: #FFFFFF;
+
+    height: 45px;
+    width: 110px;
+    padding: 0px 20px;
+    font-size: 13px;
+
+    border: none;
+    border-radius: 8px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
+
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.container :where(.dashboard-container) :where(.add-candidate) :where(.button-container) :where(button:hover) {
+    background: #059669;
+} 
+
+.container :where(.dashboard-container) :where(.seperator-line) {
+    margin: 25px 35px;
+    border: 1px solid darkgrey;
+}
+
+
+
+
+.container :where(.dashboard-container) :where(.overlay) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* black with opacity */
+    z-index: 99;
+}
+
+.container :where(.dashboard-container) :where(.edit-container) {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 100;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+} 
+
+.container :where(.dashboard-container) :where(.table-wrapper) {
+    max-height: 340px;
+    padding: 0px 40px; 
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.container :where(.dashboard-container) :where(table) {
+    width: 100%;
+    padding: 0px 20px;
+    border-collapse: collapse;
+    border: none;
+    border-radius: 8px;
+    background: #FFFFFF;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06)
+}
+
+.container :where(.dashboard-container) :where(table) :where(thead) {
+    background: #F1F5F9;
+    color: #1E293B;;
+}
+
+.container :where(.dashboard-container) :where(table) :where(thead, tbody) :where(tr) {
+    /* color: #334155; */
+    transition: all 0.3s ease;   
+}
+
+.container :where(.dashboard-container) :where(table) :where(thead, tbody) :where(tr:hover) {
+    background: #F8FAFC;   
+}
+
+.container :where(.dashboard-container) :where(table) :where(thead, tbody) :where(tr) :where(th, td) {
+    border: 1px solid #E2E8F0;
+    width: 100px;
+    height: 40px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.card {
+    background: var(--color-two-card-template);
+    padding: 24px;
+
+    border: 1px solid var(--color-three-border);
+    border-radius: 12px;
+
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+/*  */
+
+.card :where(table) {
+    border-collapse: collapse;
+    background: var(--color-two-card-template);
+    text-align: center;
+    overflow: hidden;
+}
+
+.card :where(table) :where(thead, tbody) :where(tr) {
+    border-bottom: 1px solid lightgrey;
+
+    th, td {
+        width: 200px;
+        border-bottom: 1px solid lightgrey;
+    }
+}
+
+.card :where(table) :where(thead, tbody) tr:last-child {
+    border-bottom: none;
+}
