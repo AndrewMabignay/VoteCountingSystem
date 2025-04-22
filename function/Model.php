@@ -61,7 +61,11 @@ class Model {
                         header('Location: ../client/standard.php');
                         exit;
                 }
+            } else {
+                return 'Invalid Password.';
             }
+        } else {
+            return 'Invalid Username and Password.';
         }
 
         // echo 'Testing pa';
@@ -155,7 +159,11 @@ class Model {
         $statement = $conn->prepare($this->query);
         $statement->bind_param('sssi', $name, $position, $partylist, $id);
 
-        return $statement->execute() ? 'Successfully updated!' : 'Error siya'; 
+        if ($statement->execute()) {
+            return $statement->affected_rows > 0 ? 'Successfully Updated!' : 'No changes made.';
+        } else {
+            return 'Error siya';
+        }
     }
 
     // ADMIN | CANDIDATE DELETE
@@ -179,9 +187,9 @@ class Model {
         $statement->bind_param('ii', $newVoteCount, $id);
 
         if ($statement->execute()) {
-            echo 'Vote count updated successfully.';
+            return 'Vote count updated successfully.';
         } else {
-            echo 'Error siya';
+            return 'Error siya';
         }
     }
 }

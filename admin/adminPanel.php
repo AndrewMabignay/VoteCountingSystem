@@ -20,11 +20,15 @@ if (isset($_POST['status'])) {
     ob_start();
     include('navigation/dashboard.php');
     $content = ob_get_clean();
+} else if (isset($_POST['users'])) {
+    ob_start();
+    include('navigation/userRecords.php'); 
+    $content = ob_get_clean();
 } else if (!isset($_POST['dashboard'])) {
     ob_start();
     include('navigation/dashboard.php'); // FOR DEFAULT
     $content = ob_get_clean();
-}
+} 
 
 ?>
 
@@ -55,6 +59,9 @@ if (isset($_POST['status'])) {
             </button>
             <button type="submit" name="result">
                 <i class="fas fa-chart-line"></i> Result
+            </button>
+            <button type="submit" name="users">
+                <i class="fas fa-user"></i> Users
             </button>
         </form>
 

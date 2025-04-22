@@ -1,0 +1,162 @@
+:root {
+    --color-one-body: #E2E8F0;                   /* Light steel blue-gray */
+    --color-two-card-template: #F1F5F9;          /* Soft neutral, not white */
+    --color-three-border: #CBD5E1;               /* Soft gray border (okay) */
+    --color-accent-primary: #4F46E5;             /* Vivid Blue (Voting CTA) */
+    --color-accent-hover: #4338CA;               /* Hover state */
+    --font-family-one: 'Poppins', sans-serif;
+
+    --text-color-primary: #1E293B;     /* Dark Slate for main text */
+    --text-color-secondary: #475569;   /* Muted Gray for labels and small text */
+    --text-color-error: #DC2626;  
+}
+
+body {
+    background: var(--color-one-body);
+    height: 100vh;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.vote-container {
+    width: 80%;
+    background: var(--color-two-card-template);
+    color: var(--text-color-primary); 
+    padding: 30px 0px;
+
+    border: none;
+    border-radius: 12px;
+
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
+    h2 {
+        font-size: 20px;
+    }
+}
+
+.vote-container :where(.logout) {
+    padding: 0px 80px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.vote-container :where(.logout) :where(button) {
+    background: var(--color-accent-primary);
+    height: 40px;
+    width: 120px;
+    font-size: 14px;
+    color: var(--color-two-card-template);
+
+    border: 1px solid var(--color-three-border);
+    border-radius: 6px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    transition: all 0.3s ease;
+}
+
+.vote-container :where(.logout) :where(button):hover {
+    background: var(--color-accent-hover);
+    cursor: pointer;
+}
+
+.vote-container :where(.table-wrapper) {
+    padding: 0px 30px;
+}
+
+.vote-container :where(.table-wrapper) :where(table) {    
+    width: 100%;
+    padding: 0px 20px;
+    text-align: center;
+
+    border-collapse: collapse;
+    border: none;
+    border-radius: 8px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.vote-container :where(.table-wrapper) :where(table) :where(thead) {
+    border-bottom: 1px solid lightgray;
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+.vote-container :where(.table-wrapper) :where(table) :where(thead) :where(tr) {
+    font-size: 16px;
+}
+
+.vote-container :where(.table-wrapper) :where(table) :where(thead, tbody) :where(tr) :where(th, td) {
+    height: 50px;
+    width: 300px;
+}
+
+.vote-container :where(.table-wrapper) :where(table) :where(tbody) :where(tr) {
+    border: 1px solid lightgray;
+    border-radius: 8px;
+
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    animation: fadeSlideIn 0.6s ease forwards;
+}
+
+.vote-container :where(.table-wrapper) :where(table) :where(tbody) :where(tr):hover {
+    background-color: #EEF2FF; 
+    transform: scale(1.01);   
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); 
+    cursor: pointer;           
+    transition: all 0.2s ease;
+}  
+
+.vote-container :where(.table-wrapper) :where(table) :where(tbody) :where(tr):nth-child(odd) {
+    animation-delay: 0.2s;
+} 
+
+.vote-container :where(.table-wrapper) :where(table) :where(tbody) :where(tr):nth-child(even) {
+    animation-delay: 0.4s;
+} 
+
+.vote-container :where(.table-wrapper) :where(table) :where(thead, tbody) {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.vote-container :where(.table-wrapper) :where(table) :where(tbody) :where(tr) :where(td) :where(form) :where(button) {
+    background: var(--color-accent-primary);
+    color: var(--color-two-card-template);
+    padding: 5px 20px;
+
+    border: none;
+    border-radius: 6px;
+}
+
+.vote-container :where(.table-wrapper) :where(table) :where(tbody) :where(tr) :where(td) :where(form) :where(button):disabled {
+    background: #C7D2FE;
+    color: var(--text-color-secondary);
+    
+}

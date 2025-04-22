@@ -1,5 +1,19 @@
+:root {
+    --color-one-body: #E2E8F0;                   /* Light steel blue-gray */
+    --color-two-card-template: #F1F5F9;          /* Soft neutral, not white */
+    --color-three-border: #CBD5E1;               /* Soft gray border (okay) */
+    --color-accent-primary: #4F46E5;             /* Vivid Blue (Voting CTA) */
+    --color-accent-hover: #4338CA;               /* Hover state */
+    --font-family-one: 'Poppins', sans-serif;
+
+    --text-color-primary: #1E293B;     /* Dark Slate for main text */
+    --text-color-secondary: #475569;   /* Muted Gray for labels and small text */
+    --text-color-error: #DC2626;  
+}
+
+
 body {
-    background: var(--color-one-background);
+    background: var(--color-one-body);
     height: 100vh;
     
     display: flex;
@@ -8,29 +22,104 @@ body {
 }
 
 .container {
-    background: var(--color-eight-form-container);
-    color: var(--color-six-text);
+    background: var(--color-two-card-template);
+    color: var(--text-color-primary); 
     padding: 30px;
 
     border: none;
     border-radius: 12px;
 
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
+    h2 {
+        font-size: 20px;
+    }
+}
+
+.container :where(form) {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    p {
+        font-size: 13px;
+        color: var(--text-color-error);
+    }
 }
 
 .container :where(form) :where(.input-container) {
     font-size: 16px;
 
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    align-items: center;
+
+    border: none;
+    border-radius: 8px;
+
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+
+    label {
+        background: var(--color-accent-primary);
+        color: var(--color-two-card-template);
+        padding: 10px 15px;
+        font-size: 14px;
+
+        border-left: 1px solid var(--color-five-soft-border-form-fields);
+        border-top: 1px solid var(--color-five-soft-border-form-fields);
+        border-bottom: 1px solid var(--color-five-soft-border-form-fields);
+        border-right: none;
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+    }
 
     input {
         background: var(--color-eight-form-container);
-        width: 320px;
+        width: 300px;
         padding: 10px 15px;
         
-        border: 1px solid var(--color-five-soft-border-form-fields);
-        border-radius: 8px;
+        border-top: 1px solid var(--color-five-soft-border-form-fields);
+        border-bottom: 1px solid var(--color-five-soft-border-form-fields);
+        border-left: 1px solid var(--color-five-soft-border-form-fields);
+        border-right: none;
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
     }
+}
+
+.container :where(form) :where(.input-container) input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+
+.container :where(form) :where(.button-container) {
+    display: flex;
+    justify-content: space-between;
+}
+
+.container :where(form) :where(.button-container) :where(button) {
+    background: var(--color-accent-primary);
+    height: 40px;
+    width: 120px;
+    font-size: 14px;
+    color: var(--color-two-card-template);
+
+    border: 1px solid var(--color-three-border);
+    border-radius: 6px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    transition: all 0.3s ease;
+}
+
+.container :where(form) :where(.button-container) :where(button):hover {
+    background: var(--color-accent-hover);
+    cursor: pointer;
 }
