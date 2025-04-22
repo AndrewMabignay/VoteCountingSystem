@@ -35,7 +35,7 @@ if (isset($_POST['status'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="../public/css/general.css">
-    <link rel="stylesheet" href="../public/css/admin/status.css">
+    <link rel="stylesheet" href="../public/css/admin/admin.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
@@ -75,5 +75,7 @@ if (isset($_POST['status'])) {
             }
         });
     </script>
+
+    <script src="../public/js/status.js"></script>
 </body>
 </html>

@@ -6,11 +6,6 @@ class Model {
     private $databaseTable = '';
     private $query = '';
 
-    public function __construct()
-    {
-        // echo 'Hello Constructor';
-    }
-
     public function setDatabaseTable($databaseTable) {
         $this->databaseTable = $databaseTable;
     }
@@ -32,7 +27,7 @@ class Model {
         return $rows;
     }
 
-    // LOGIN AUTHENTICATION 
+    // 1. LOGIN AUTHENTICATION 
     public function authentication($username, $password) {
         global $conn;
 
@@ -80,11 +75,12 @@ class Model {
         exit;
     }
 
+    // 2. ===================== ADMIN CONTAINER =====================
     // ADMIN | ADMIN PANEL 
     public function insert($name, $position, $partylist, $voteCount) {
         global $conn;
 
-        if (empty($name) || empty($position) || empty($partylist) || empty($votecount)) {
+        if (empty($name) || empty($position) || empty($partylist)) {
             return 'Fill up all fields!';
         }
 
@@ -130,7 +126,7 @@ class Model {
         return $rows;
     }
 
-    // ADMIN | RESULT
+    // ADMIN | CANDIDATE RESULT
     public function candidateVoteResult() {
         global $conn;
 
@@ -148,6 +144,30 @@ class Model {
         return $rows;
     }
 
+    // ADMIN | CANDIDATE UPDATE 
+    public function candidateEdit($id, $name, $position, $partylist) {
+        // CONDITION BEFORE UPDATE
+
+        // START UPDATE
+        global $conn;
+
+        $this->query = "UPDATE candidates SET Name = ?, Position = ?, PartyList = ? WHERE ID = ?";
+        $statement = $conn->prepare($this->query);
+        $statement->bind_param('sssi', $name, $position, $partylist, $id);
+
+        return $statement->execute() ? 'Successfully updated!' : 'Error siya'; 
+    }
+
+    // ADMIN | CANDIDATE DELETE
+    public function candidateDelete($id) {
+        global $conn;
+
+        $this->query = "DELETE FROM candidates WHERE ID = ?";
+        $statement = $conn->prepare($this->query);
+        $statement->bind_param('i', $id);
+        $statement->execute();
+    }
+
     // USER | STANDARD LIST
     public function updateCandidatesVote($id, $voteCount) {
         global $conn;
@@ -157,8 +177,6 @@ class Model {
         
         $newVoteCount = $voteCount + 1;
         $statement->bind_param('ii', $newVoteCount, $id);
-
-        
 
         if ($statement->execute()) {
             echo 'Vote count updated successfully.';

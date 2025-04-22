@@ -282,34 +282,153 @@ nav :where(form) :where(hr) {
 
 
 
-.card {
+.card {    
+    width: 75%;
+    height: 100%;
+    margin: 0px 50px 0px 0px;
+
+    border: none;
+    border-radius: 12px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card :where(.status-header) {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.card :where(.status-header) :where(h1) {
     background: var(--color-two-card-template);
-    padding: 24px;
+    color: #0F172A;
+    width: 100%;
+    height: 60px;
+    padding: 0px 35px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+
+    border: 1px solid var(--color-three-border);
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+}
+
+
+/* =============== 2. STATUS CONTAINER =============== */
+.card :where(.status-container) {
+    height: 100%;
+    margin-top: 30px;
+    padding: 20px 0px;
+    background: var(--color-two-card-template);
 
     border: 1px solid var(--color-three-border);
     border-radius: 12px;
 
-    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); /* Subtle depth */
 }
 
-/*  */
-
-.card :where(table) {
-    border-collapse: collapse;
-    background: var(--color-two-card-template);
-    text-align: center;
-    overflow: hidden;
+/* =============== 2.1. STATUS CONTAINER | TABLE =============== */
+.card :where(.status-container) :where(.table-wrapper) {
+    max-height: 480px;
+    padding: 0px 40px; 
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
-.card :where(table) :where(thead, tbody) :where(tr) {
-    border-bottom: 1px solid lightgrey;
-
-    th, td {
-        width: 200px;
-        border-bottom: 1px solid lightgrey;
+.card :where(.status-container) :where(.table-wrapper)::-webkit-scrollbar {
+    width: 10px; 
+}
+  
+.card :where(.status-container) :where(.table-wrapper)::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+    border-radius: 10px;
+}
+  
+.card :where(.status-container) :where(.table-wrapper)::-webkit-scrollbar-thumb {
+    background: var(--color-accent-primary); 
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+  
+.card :where(.status-container) :where(.table-wrapper)::-webkit-scrollbar-thumb:hover {
+    background: var(--color-accent-hover); 
+}
+  
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
+  
+.card :where(.status-container) :where(.table-wrapper) :where(table) {    
+    width: 100%;
+    padding: 0px 20px;
+    text-align: center;
 
-.card :where(table) :where(thead, tbody) tr:last-child {
-    border-bottom: none;
+    border-collapse: collapse;
+    border: none;
+    border-radius: 8px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.card :where(.status-container) :where(.table-wrapper) :where(table) :where(thead) {
+    border-bottom: 1px solid lightgray;
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+.card :where(.status-container) :where(.table-wrapper) :where(table) :where(thead) :where(tr) {
+    font-size: 16px;
+}
+
+.card :where(.status-container) :where(.table-wrapper) :where(table) :where(thead, tbody) :where(tr) :where(th, td) {
+    height: 50px;
+    width: 300px;
+}
+
+
+.card :where(.status-container) :where(.table-wrapper) :where(table) :where(tbody) :where(tr) {
+    border: 1px solid lightgray;
+    border-radius: 8px;
+
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    animation: fadeSlideIn 0.6s ease forwards;
+}
+
+.card :where(.status-container) :where(.table-wrapper) :where(table) :where(tbody) :where(tr):hover {
+    background-color: #f5f5f5; 
+    transform: scale(1.01);   
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); 
+    cursor: pointer;           
+    transition: all 0.2s ease;
+}  
+
+.card :where(.status-container) :where(.table-wrapper) :where(table) :where(tbody) :where(tr):nth-child(odd) {
+    animation-delay: 0.2s;
+} 
+
+.card :where(.status-container) :where(.table-wrapper) :where(table) :where(tbody) :where(tr):nth-child(even) {
+    animation-delay: 0.4s;
+} 
+
+.card :where(.status-container) :where(.table-wrapper) :where(table) :where(thead, tbody) {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
 }
