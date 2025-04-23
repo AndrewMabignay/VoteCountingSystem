@@ -1,4 +1,12 @@
 <?php
+    if (!isset($_SESSION['id'])):
+        header("Location: ../../auth/login.php");
+        exit;
+    elseif ($_SESSION['role'] !== "Admin"):
+        header("Location: ../../client/standard.php");
+        exit;
+    endif;   
+
     require_once '../function/Model.php';
 
     $resultCandidates = new Model();

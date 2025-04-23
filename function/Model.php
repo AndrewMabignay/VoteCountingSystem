@@ -80,6 +80,7 @@ class Model {
     }
 
     // 2. ===================== ADMIN CONTAINER =====================
+    // ADD NEW CHANGES 
     // ADMIN | ADMIN PANEL 
     public function insert($name, $position, $partylist, $voteCount) {
         global $conn;
@@ -88,12 +89,25 @@ class Model {
             return 'Fill up all fields!';
         }
 
+        // CHECK FOR DUPLICATE NAME + POSITION + PARTYLIST.
+        $this->query = "SELECT * FROM {$this->databaseTable} WHERE Name = ? AND Position = ? AND PartyList = ?";
+        $statement = $conn->prepare($this->query); 
+        $statement->bind_param('sss', $name, $position, $partylist);   
+
+        $statement->execute();
+        $search = $statement->get_result();
+
+        if ($search->num_rows > 0) {
+            return 'Duplicate candidate in partylist is invalid.';
+        }
+
         $this->query = "INSERT INTO {$this->databaseTable} (Name, Position, PartyList, VoteCount) VALUES (?, ?, ?, ?)"; 
         $statement = $conn->prepare($this->query);
         $statement->bind_param('sssi', $name, $position, $partylist, $voteCount);
         
         return $statement->execute() ? 'Successfully Inserted' : 'Not Successfully Inserted';
     }
+    // END NEW CHANGES
 
     // ADMIN | CANDIDATE SEARCH
     public function search($name) {
@@ -148,12 +162,25 @@ class Model {
         return $rows;
     }
 
+    // ADD NEW CHANGES
     // ADMIN | CANDIDATE UPDATE 
     public function candidateEdit($id, $name, $position, $partylist) {
         // CONDITION BEFORE UPDATE
 
         // START UPDATE
         global $conn;
+
+        // CHECK FOR DUPLICATE NAME + POSITION + PARTYLIST.
+        $this->query = "SELECT * FROM {$this->databaseTable} WHERE Name = ? AND Position = ? AND PartyList = ?";
+        $statement = $conn->prepare($this->query); 
+        $statement->bind_param('sss', $name, $position, $partylist);   
+
+        $statement->execute();
+        $search = $statement->get_result();
+
+        if ($search->num_rows > 0) {
+            return 'Duplicate candidate in partylist is invalid.';
+        }
 
         $this->query = "UPDATE candidates SET Name = ?, Position = ?, PartyList = ? WHERE ID = ?";
         $statement = $conn->prepare($this->query);
@@ -165,6 +192,7 @@ class Model {
             return 'Error siya';
         }
     }
+    // END NEW CHANGES
 
     // ADMIN | CANDIDATE DELETE
     public function candidateDelete($id) {
@@ -175,6 +203,54 @@ class Model {
         $statement->bind_param('i', $id);
         $statement->execute();
     }
+
+    // ADD NEW CHANGES
+    // ADMIN | USER MANAGEMENT
+    public function addUser($name, $age, $address, $password, $role) {        
+        global $conn;
+        
+        // Check if it is empty.
+        if (empty($name) || empty($age) || empty($address) || empty($password) || empty($role)) {
+            return 'Fill up all fields!';
+        }
+
+        // Check for duplicate names.
+        $this->query = "SELECT * FROM accounts WHERE Name = ? AND Role";
+        $statement = $conn->prepare($this->query); 
+        $statement->bind_param('s', $name);   
+
+        $statement->execute();
+        $search = $statement->get_result();
+
+        if ($search->num_rows > 0) {
+            return 'Duplicate names invalid';
+        }
+
+        $this->query = "INSERT INTO accounts(Name, Age, Address, Password, Role) VALUES (?, ?, ?, ?, ?)";
+        $statement = $conn->prepare($this->query);
+        $statement->bind_param('sisss', $name, $age, $address, $password, $role);
+        
+        return $statement->execute() ? 'Successfully Added' : 'Not Successfully Added';
+    }
+
+    public function showUser($id) {
+        global $conn;
+
+        $this->query = "SELECT * FROM accounts WHERE ID <> '$id' AND Name <> 'admin'"; 
+        $retrieve = \mysqli_query($conn, $this->query);
+
+        $rows = [];
+
+        if ($retrieve && mysqli_num_rows($retrieve) > 0) {
+            while ($row = mysqli_fetch_assoc($retrieve)) {
+                $rows[] = $row;
+            }
+        } 
+
+        return $rows;   
+    }
+    // END NEW CHANGES
+
 
     // USER | STANDARD LIST
     public function updateCandidatesVote($id, $voteCount) {
@@ -193,5 +269,4 @@ class Model {
         }
     }
 }
-
 ?>

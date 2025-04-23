@@ -1,4 +1,12 @@
 <?php
+    if (!isset($_SESSION['id'])):
+        header("Location: ../../auth/login.php");
+        exit;
+    elseif ($_SESSION['role'] !== "Admin"):
+        header("Location: ../../client/standard.php");
+        exit;
+    endif;   
+
     if (isset($_POST['userEdit'])) {
         $editUserID = $_POST['userId'];
         $editUserName = $_POST['userName'];
@@ -8,19 +16,61 @@
         $editUserRole = $_POST['userRole'];
     }
 
+    // ADD NEW CHANGES 
+    if (isset($_POST['userCreate'])) {
+        $addUser = true;
+    }
+
+    if (isset($_POST['newUserAdded'])) {
+        $addUsername = $_POST['userName'];
+        $addUserAge = $_POST['userAge'];
+        $addUserAddress = $_POST['userAddress'];
+        $addUserPassword = $_POST['userPassword'];
+        $addUserRole = $_POST['userRole'];
+
+        // echo $addUsername . $addUserAge . $addUserAddress . $addUserPassword . $addUserRole;
+
+        require_once '../function/Model.php';
+        $addUser = new Model();
+        $addUser->setDatabaseTable('accounts'); 
+        echo $addUser->addUser($addUsername, $addUserAge, $addUserAddress, $addUserPassword, $addUserRole);   
+    }
+
     require_once '../function/Model.php';
+
     $users = new Model();
     $users->setDatabaseTable('accounts');
-    $data = $users->index();
+    $data = $users->showUser($_SESSION['id']);
+
+    // END NEW CHANGES
+    
+
+    // require_once '../function/Model.php';
+    // $users = new Model();
+    // $users->setDatabaseTable('accounts');
+    // $data = $users->index();
 ?>
 
 <div class="card">
     <header class="status-header">
-        <h1>List of Users</h1>
+        <h1>Users</h1>
     </header>
 
     <div class="status-container">
-        
+        <!-- ADD NEW CHANGES -->
+        <div class="subheader-container">
+            <h2>List of Users</h2>
+
+            <form action="adminPanel.php" method="POST">
+                <input type="hidden" name="users" value="1">
+                <button type="submit" name="userCreate">
+                    CREATE
+                </button>
+            </form>
+        </div>    
+        <!-- END NEW CHANGES -->
+
+
         <div class="table-wrapper">
             <table>
                 <thead>
@@ -80,6 +130,65 @@
             </table>
         </div>
 
+        <!-- ADD NEW CHANGES -->
+        <!-- ADD FORM -->
+        <?php if (isset($addUser) && $addUser == true): ?>
+            <div class="overlay"></div>
+            <div class="edit-container">                
+                <form action="adminPanel.php" method="POST">
+                    <input type="hidden" name="users" value="1">
+                    <div class="header-form-container">
+                        <h2>Add User</h2>  
+                        <button type="submit" name="userClose">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <input type="hidden" value="<?php //echo $editUserID; ?>" name="userId">
+                    
+                    <!-- NAME CONTAINER -->
+                    <div class="input-container">
+                        <label for="userName">Name</label>
+                        <input type="text" value="<?php //echo $editUserName; ?>" name="userName" id="userName">
+                    </div>
+                    
+                    <!-- AGE CONTAINER -->
+                    <div class="input-container">
+                        <label for="userAge">Age</label>
+                        <input type="text" value="<?php //echo $editUserAge; ?>" name="userAge" id="userAge">
+                    </div>
+
+                    <!-- ADDRESS CONTAINER -->
+                    <div class="input-container">
+                        <label for="userAddress">Address</label>
+                        <input type="text" value="<?php //echo $editUserAddress; ?>" name="userAddress" id="userAddress">
+                    </div>
+
+                    <!-- PASSWORD CONTAINER -->
+                    <div class="input-container">
+                        <label for="userPassword">Password</label>
+                        <input type="text" value="<?php //echo $editUserPassword; ?>" name="userPassword" id="userPassword">
+                    </div>
+
+                    <!-- ROLE CONTAINER -->
+                    <div class="input-container">
+                        <label for="userRole">Role</label>
+                        <select name="userRole" id="userRole">
+                            <option value="User" <?php //echo ($editUserRole == 'User') ? 'selected' : ''; ?>>User</option>
+                            <option value="Admin" <?php //echo ($editUserRole == 'Admin') ? 'selected' : ''; ?>>Admin</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" name="newUserAdded">Add</button>
+                </form>
+
+                <?php if (isset($updateCondition)): ?>
+                    <p><?php echo $updateCondition; ?></p>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
+            
+        <!-- END NEW CHANGES -->
+
         <!-- EDIT FORM -->
         <?php if (isset($editUserName)): ?>
             <div class="overlay"></div>
@@ -87,7 +196,7 @@
                 <form action="adminPanel.php" method="POST">
                     <input type="hidden" name="users" value="1">
                     <div class="header-form-container">
-                        <h2>Edit Form</h2>  
+                        <h2>Edit User</h2>  
                         <button type="submit" name="userClose">
                             <i class="fa-solid fa-xmark"></i>
                         </button>

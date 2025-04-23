@@ -1,5 +1,13 @@
 <?php
 
+if (!isset($_SESSION['id'])):
+    header("Location: ../../auth/login.php");
+    exit;
+elseif ($_SESSION['role'] !== "Admin"):
+    header("Location: ../../client/standard.php");
+    exit;
+endif;   
+
 if (isset($_POST['save'])) {
     $name = $_POST['name'];
     $position = $_POST['position'];
@@ -18,7 +26,7 @@ if (isset($_POST['search'])) {
     require_once '../function/Model.php';
     $searchCandidate = new Model();
     $searchCandidate->setDatabaseTable('candidates');
-    $data = $searchCandidate->search($searchField);
+    $dataCandidate = $searchCandidate->search($searchField);
 }
 
 if (isset($_POST['edit'])) {
@@ -123,7 +131,7 @@ $data = $showCandidates->index();
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach($data as $candidatesSearch): ?>
+                        <?php foreach($dataCandidate as $candidatesSearch): ?>
                             <tr>
                                 <td><?php echo $candidatesSearch['Name']; ?></td>
                                 <td><?php echo $candidatesSearch['Position']; ?></td>
@@ -204,8 +212,4 @@ $data = $showCandidates->index();
             </div>
         <?php endif; ?>
     </div>
-
-    
-
-    
 </div>

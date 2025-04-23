@@ -1,12 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 :root {
-    --color-one-body: #F8FAFC;                   /* Light neutral background */
-    --color-two-card-template: #FFFFFF;          /* Clean card base */
-    --color-three-border: #CBD5E1;               /* Soft gray border */
+    --color-one-body: #E2E8F0;                   /* Light steel blue-gray */
+    --color-two-card-template: #F1F5F9;          /* Soft neutral, not white */
+    --color-three-border: #CBD5E1;               /* Soft gray border (okay) */
     --color-accent-primary: #4F46E5;             /* Vivid Blue (Voting CTA) */
     --color-accent-hover: #4338CA;               /* Hover state */
     --font-family-one: 'Poppins', sans-serif;
+
+    --text-color-primary: #1E293B;     /* Dark Slate for main text */
+    --text-color-secondary: #475569;   /* Muted Gray for labels and small text */
+    --text-color-error: #DC2626;  
 }
 
 * {

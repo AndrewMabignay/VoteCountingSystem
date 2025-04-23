@@ -2,17 +2,27 @@
 
 session_start();
 
+if (!isset($_SESSION['id'])):
+    header("Location: ../auth/login.php");
+    exit;
+elseif ($_SESSION['role'] !== "Admin"):
+    header("Location: ../client/standard.php");
+    exit;
+endif;   
+
 if (isset($_POST['logout'])) {
     require_once '../function/Model.php';
     $logout = new Model();
     $logout->logout();
 }
 
-if (isset($_POST['status'])) {
+$page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
+
+if (isset($_POST['status']) || $page == 'status') {
     ob_start();
     include('navigation/status.php');
     $content = ob_get_clean();
-} else if (isset($_POST['result'])) {
+} else if (isset($_POST['result']) || $page == 'result') {
     ob_start();
     include('navigation/result.php');
     $content = ob_get_clean();
@@ -20,7 +30,7 @@ if (isset($_POST['status'])) {
     ob_start();
     include('navigation/dashboard.php');
     $content = ob_get_clean();
-} else if (isset($_POST['users'])) {
+} else if (isset($_POST['users']) || $page == 'users') {
     ob_start();
     include('navigation/userRecords.php'); 
     $content = ob_get_clean();
@@ -50,17 +60,17 @@ if (isset($_POST['status'])) {
     
     <!-- SIDEBAR NAVIGATION -->
     <nav>
-        <form action="adminPanel.php" method="POST">
-            <button type="submit" name="admin">
+        <form action="adminPanel.php" method="GET">
+            <button type="submit" name="page" value="dashboard">
                 <i class="fas fa-columns"></i> Dashboard
             </button>
-            <button type="submit" name="status">
+            <button type="submit" name="page" value="status">
                 <i class="fas fa-circle-notch"></i> Status
             </button>
-            <button type="submit" name="result">
+            <button type="submit" name="page" value="result">
                 <i class="fas fa-chart-line"></i> Result
             </button>
-            <button type="submit" name="users">
+            <button type="submit" name="page" value="users">
                 <i class="fas fa-user"></i> Users
             </button>
         </form>
