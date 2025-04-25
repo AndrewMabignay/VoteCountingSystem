@@ -249,6 +249,50 @@ class Model {
 
         return $rows;   
     }
+
+    public function deleteUser($id) {
+        global $conn;
+
+        $this->query = "DELETE FROM accounts WHERE ID = ?";
+        $statement = $conn->prepare($this->query);
+        $statement->bind_param('i', $id);
+        $statement->execute();
+    }
+
+    public function editUser($id, $name, $age, $address, $password, $role) {
+        global $conn;
+        
+        // Check if it is empty.
+        if (empty($name) || empty($age) || empty($address) || empty($password) || empty($role)) {
+            return 'Fill up all fields!';
+        }
+
+        // Check for duplicate names.
+        $this->query = "SELECT * FROM accounts WHERE Name = ?";
+        $statement = $conn->prepare($this->query); 
+        $statement->bind_param('s', $name);   
+
+        $statement->execute();
+        $search = $statement->get_result();
+
+        if ($search->num_rows > 0) {
+            return 'Duplicate names invalid';
+        }
+
+        $this->query = "UPDATE accounts SET Name = ?, Age = ?, Address = ?, Password = ?, Role = ? WHERE ID = ?";
+        $statement = $conn->prepare($this->query);
+        $statement->bind_param('sisssi', $name, $age, $address, $password, $role, $id);
+
+        if ($statement->execute()) {
+            if ($statement->affected_rows > 0) {
+                return 'Successfully Updated!';
+            } else {
+                return 'No data was changed. Maybe the values are the same.';
+            }
+        } else {
+            return 'Error siya';
+        }       
+    }
     // END NEW CHANGES
 
 

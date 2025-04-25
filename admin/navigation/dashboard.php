@@ -34,8 +34,6 @@ if (isset($_POST['edit'])) {
     $editName = $_POST['name']; 
     $editPosition = $_POST['position']; 
     $editPartylist = $_POST['partylist']; 
-
-    echo $editID . $editName . $editPosition . $editPartylist;
 }
 
 if (isset($_POST['update'])) {
@@ -120,7 +118,7 @@ $data = $showCandidates->index();
         <!-- LIST OF CANDIDATES BASED ON SEARCH -->
 
         <?php if (isset($searchField)): ?>
-            <div class="table-wrapper">
+            <div class="table-wrapper" id="candidateTable">
                 <table>
                     <thead>
                         <tr>
@@ -214,27 +212,13 @@ $data = $showCandidates->index();
     </div>
 </div>
 
-<script>
-    // Function to scroll to the bottom of the table
-    function scrollToBottom() {
-        const tableWrapper = document.querySelector('.table-wrapper');
-        tableWrapper.scrollTop = tableWrapper.scrollHeight;
-    }
 
-    // MutationObserver to detect changes in the tbody (when new rows are added)
-    const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            if (mutation.type === 'childList') {
-                // When a new row is added, scroll to the bottom
-                scrollToBottom();
-            }
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const rows = document.querySelectorAll('.dashboard-container table tbody tr');
+
+        rows.forEach((row, index) => {
+            row.style.animationDelay = `${index * 0.2}s`;
         });
     });
-
-    // Configuring the MutationObserver to observe changes in the tbody
-    const tbody = document.querySelector('tbody');
-    observer.observe(tbody, { childList: true });
-
-    // Optional: You can disconnect the observer after a certain period of time if necessary
-    // observer.disconnect();
 </script>

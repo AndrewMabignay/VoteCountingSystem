@@ -36,6 +36,29 @@
         echo $addUser->addUser($addUsername, $addUserAge, $addUserAddress, $addUserPassword, $addUserRole);   
     }
 
+    if (isset($_POST['userUpdate'])) {
+        $editUserID = $_POST['userId'];
+        $editUserName = $_POST['userName'];
+        $editUserAge = $_POST['userAge'];
+        $editUserAddress = $_POST['userAddress'];
+        $editUserPassword = $_POST['userPassword'];
+        $editUserRole = $_POST['userRole'];
+
+        require_once '../function/Model.php';
+        $editUser = new Model();
+        $editUser->setDatabaseTable('accounts'); 
+        echo $editUser->editUser($editUserID, $editUserName, $editUserAge, $editUserAddress, $editUserPassword, $editUserRole);   
+    }
+
+    if (isset($_POST['userDelete'])) {
+        $deleteUserId = $_POST['userId'];
+    
+        require_once '../function/Model.php';
+        $deleteUser = new Model();
+        $deleteUser->setDatabaseTable('accounts');
+        $deleteUser->deleteUser($deleteUserId);
+    }
+
     require_once '../function/Model.php';
 
     $users = new Model();
@@ -119,7 +142,7 @@
                                     <button type="submit" name="userEdit">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button>
+                                    <button type="submit" name="userDelete">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>

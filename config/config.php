@@ -5,7 +5,7 @@ $db_host = 'localhost';
 $db_port = 3306;
 $db_name = 'VoteSystem';
 $db_user = 'root';
-$db_pass = '1103';
+$db_pass = '';
 
 $conn = \mysqli_connect($db_host, $db_user, $db_pass, $db_name, $db_port);
 

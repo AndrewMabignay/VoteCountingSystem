@@ -20,6 +20,21 @@
     </header>
 
     <div class="status-container">
+        
+        <!-- 1. START LIST OF CANDIDATES STATUS SEARCH CONTAINER -->
+        <form action="" class="status-search-container">
+            <h2>List of Candidates Status</h2>
+            <div class="input-container">
+                <input type="text" name="candidateSearchStatus">
+                <label for="">
+                    <i class="fas fa-search"></i>
+                </label>
+            </div>
+        </form>
+        <!-- 1. END LIST OF CANDIDATES STATUS SEARCH CONTAINER -->
+
+        <hr class="seperator-line">
+
         <div class="table-wrapper">
             <table>
                 <thead>
