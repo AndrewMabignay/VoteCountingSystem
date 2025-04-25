@@ -213,3 +213,28 @@ $data = $showCandidates->index();
         <?php endif; ?>
     </div>
 </div>
+
+<script>
+    // Function to scroll to the bottom of the table
+    function scrollToBottom() {
+        const tableWrapper = document.querySelector('.table-wrapper');
+        tableWrapper.scrollTop = tableWrapper.scrollHeight;
+    }
+
+    // MutationObserver to detect changes in the tbody (when new rows are added)
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList') {
+                // When a new row is added, scroll to the bottom
+                scrollToBottom();
+            }
+        });
+    });
+
+    // Configuring the MutationObserver to observe changes in the tbody
+    const tbody = document.querySelector('tbody');
+    observer.observe(tbody, { childList: true });
+
+    // Optional: You can disconnect the observer after a certain period of time if necessary
+    // observer.disconnect();
+</script>

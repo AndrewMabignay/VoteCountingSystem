@@ -90,19 +90,15 @@ nav :where(form) :where(hr) {
 
 /* ================ 2. DASHBOARD ================ */
 .container {
-    /* background: var(--color-two-card-template); */
     width: 75%;
     height: 100%;
     margin: 0px 50px 0px 0px;
 
-    /* border: 1px solid var(--color-three-border); */
     border-radius: 12px;
 
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-
-    /* box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); Subtle depth */
 }
 
 .container :where(.dashboard-header) {
@@ -231,7 +227,7 @@ nav :where(form) :where(hr) {
 } 
 
 .container :where(.dashboard-container) :where(.table-wrapper) {
-    max-height: 340px;
+    max-height: 200px;
     padding: 0px 40px; 
     overflow-y: auto;
     overflow-x: hidden;
@@ -240,7 +236,8 @@ nav :where(form) :where(hr) {
 .container :where(.dashboard-container) :where(table) {
     width: 100%;
     padding: 0px 20px;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0 10px;
     border: none;
     border-radius: 8px;
     background: #FFFFFF;
@@ -254,6 +251,11 @@ nav :where(form) :where(hr) {
 }
 
 .container :where(.dashboard-container) :where(table) :where(thead, tbody) :where(tr) {
+    margin-bottom: 10px;
+    background: lightblue;
+    
+    border-radius: 8px;
+
     /* color: #334155; */
     transition: all 0.3s ease;   
 }
@@ -263,11 +265,31 @@ nav :where(form) :where(hr) {
 }
 
 .container :where(.dashboard-container) :where(table) :where(thead, tbody) :where(tr) :where(th, td) {
-    border: 1px solid #E2E8F0;
+    /* border: 1px solid #E2E8F0; */
     width: 100px;
-    height: 40px;
+    height: 50px;
+    margin-bottom: 10px;
 }
 
+.container :where(.dashboard-container) :where(table) :where(thead) :where(tr) :where(th:first-child) {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.container :where(.dashboard-container) :where(table) :where(thead) :where(tr) :where(th:last-child) {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.container :where(.dashboard-container) :where(table) :where(tbody) :where(tr) :where(td:first-child) {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.container :where(.dashboard-container) :where(table) :where(tbody) :where(tr) :where(td:last-child) {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
 
 
 
