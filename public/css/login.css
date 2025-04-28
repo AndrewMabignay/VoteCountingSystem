@@ -121,5 +121,14 @@ body {
 
 .container :where(form) :where(.button-container) :where(button):hover {
     background: var(--color-accent-hover);
+    border: none;
     cursor: pointer;
+    transform: scale(1.05);
+}
+
+.container :where(form) :where(.button-container) :where(button):focus {
+    outline: none;
+    transform: scale(1.05);
+    background: var(--color-accent-hover);
+    border: none;
 }

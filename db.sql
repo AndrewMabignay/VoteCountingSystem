@@ -31,3 +31,11 @@ JOIN (
 ) m ON c.Position = m.Position AND c.VoteCount = m.MaxVotes;
 
 SELECT * FROM candidates c JOIN (SELECT Position, MAX(VoteCount) AS MaxVotes FROM candidates GROUP BY Position) m ON c.Position = m.Position AND c.VoteCount = m.MaxVotes;
+
+-- ADDITIONAL
+
+ALTER TABLE accounts MODIFY COLUMN Username VARCHAR(255) NOT NULL UNIQUE;
+
+INSERT INTO accounts(Name, Age, Address, Username, Password, Role) VALUES
+('admin', 21, 'Binangonan, Rizal', 'admin', 'admin', 'Admin'),
+('user', 21, 'Angono, Rizal', 'user', 'user', 'User');

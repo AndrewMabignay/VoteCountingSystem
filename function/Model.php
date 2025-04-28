@@ -35,7 +35,7 @@ class Model {
             return 'Please enter both username and password.';
         }
 
-        $this->query = "SELECT * FROM {$this->databaseTable} WHERE Name = ?";
+        $this->query = "SELECT * FROM {$this->databaseTable} WHERE Username = ?";
         $statement = $conn->prepare($this->query);
         $statement->bind_param("s", $username);
         $statement->execute();
@@ -55,7 +55,7 @@ class Model {
 
                 switch ($_SESSION['role']) {
                     case 'Admin':
-                        header('Location: ../admin/adminPanel.php');
+                        header('Location: ../admin/adminPanel.php?page=dashboard');
                         exit;
                     case 'User':
                         header('Location: ../client/standard.php');
@@ -82,7 +82,7 @@ class Model {
     // 2. ===================== ADMIN CONTAINER =====================
     // ADD NEW CHANGES 
     // ADMIN | ADMIN PANEL 
-    public function insert($name, $position, $partylist, $voteCount) {
+    public function insertCandidate($name, $position, $partylist, $voteCount) {
         global $conn;
 
         if (empty($name) || empty($position) || empty($partylist)) {
@@ -192,6 +192,24 @@ class Model {
             return 'Error siya';
         }
     }
+
+    // ADMIN | CANDIDATE ID
+    public function candidateID($id) {
+        global $conn;
+
+        $this->query = "SELECT * FROM {$this->databaseTable} WHERE ID = '$id'";
+        $retrieve = \mysqli_query($conn, $this->query);
+
+        $rows = [];
+
+        if ($retrieve && mysqli_num_rows($retrieve) > 0) {
+            while ($row = mysqli_fetch_assoc($retrieve)) {
+                $rows[] = $row;
+            }
+        } 
+
+        return $rows;
+    }
     // END NEW CHANGES
 
     // ADMIN | CANDIDATE DELETE
@@ -215,7 +233,7 @@ class Model {
         }
 
         // Check for duplicate names.
-        $this->query = "SELECT * FROM accounts WHERE Name = ? AND Role";
+        $this->query = "SELECT * FROM accounts WHERE Username = ?";
         $statement = $conn->prepare($this->query); 
         $statement->bind_param('s', $name);   
 

@@ -41,11 +41,11 @@ nav {
     border: 1px solid var(--color-three-border);
     border-radius: 12px;
 
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-
-    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); /* Subtle depth */
 }
 
 nav :where(form) {
@@ -118,8 +118,9 @@ nav :where(form) :where(hr) {
     letter-spacing: 0.5px;
 
     border: 1px solid var(--color-three-border);
-    border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    
 
     display: flex;
     align-items: center;
@@ -137,65 +138,76 @@ nav :where(form) :where(hr) {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.container :where(.dashboard-container) :where(.add-candidate) {
-    padding: 0px 40px;
-    
+.container :where(.dashboard-container) :where(.candidates-container) {
+    color: var(--text-color-primary);
+    padding: 0px 50px;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
-} 
 
-.container :where(.dashboard-container) :where(.add-candidate) :where(.input-container) {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    h2 {
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
 }
 
-.container :where(.dashboard-container) :where(.add-candidate) :where(.input-container) :where(label) {
-    font-size: 14px;
-} 
-
-.container :where(.dashboard-container) :where(.add-candidate) :where(.input-container) :where(input) {
-    height: 35px;
-    width: 200px;
-    padding: 0px 10px;
-
-    border: 1px solid lightslategrey;
-    border-radius: 6px;
-}
-
-.container :where(.dashboard-container) :where(.add-candidate) :where(.button-container) {
-    display: flex;
-    gap: 10px;
-}
-
-.container :where(.dashboard-container) :where(.add-candidate) :where(.button-container) :where(button) {
-    background: #10B981;
-    color: #FFFFFF;
-
-    height: 45px;
-    width: 110px;
-    padding: 0px 20px;
-    font-size: 13px;
-
-    border: none;
-    border-radius: 8px;
-
+.container :where(.dashboard-container) :where(.candidates-container) :where(.button-container) {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 
-    text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
-    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
+    button {
+        height: 40px;
+        width: 40px;
+        color: var(--color-two-card-template);
+        background: var(--color-accent-primary);
 
-    transition: all 0.3s ease;
-    cursor: pointer;
+        border: none;
+        border-radius: 6px;
+
+        transition: all 0.3s ease;
+    }
+
+    .search-container {
+        display: flex;
+        box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
+        border-radius: 6px;
+    
+        input {
+            height: 40px;
+            width: 200px;
+            padding: 0px 12px;
+
+            background: var(--color-eight-form-container);
+            border-top: 1px solid lightgray;
+            border-left: 1px solid lightgray;
+            border-bottom: 1px solid lightgray;
+            border-right: none;
+
+            border-top-left-radius: 6px;
+            border-bottom-left-radius: 6px;
+        }
+
+        button {
+            border-top-left-radius: 0px;
+            border-bottom-left-radius: 0px;
+        }
+    }
 }
 
-.container :where(.dashboard-container) :where(.add-candidate) :where(.button-container) :where(button:hover) {
-    background: #059669;
-} 
+.container :where(.dashboard-container) :where(.candidates-container) :where(.button-container) :where(.search-container) :where(input:focus) {
+    outline: none;
+    box-shadow: none;
+}
+
+.container :where(.dashboard-container) :where(.candidates-container) :where(.button-container) :where(button):hover {
+    background: var(--color-accent-hover);
+    cursor: pointer;
+    transform: scale(1.05);
+}
 
 .container :where(.dashboard-container) :where(.seperator-line) {
     margin: 25px 35px;
@@ -208,7 +220,7 @@ nav :where(form) :where(hr) {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7); /* black with opacity */
+    background: rgba(0, 0, 0, 0.7); 
     z-index: 99;
 }
 
@@ -224,8 +236,175 @@ nav :where(form) :where(hr) {
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
 } 
 
+
+.container :where(.dashboard-container) :where(.add-container) {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--color-two-card-template);
+    padding: 30px;
+    border-radius: 10px;
+    z-index: 100;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+} 
+
+.container :where(.dashboard-container) :where(.add-container) :where(.add-candidate) {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
+    .close-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h2 {
+            font-size: 18px;
+        }
+
+        button {
+            color: var(--color-accent-primary);
+            background: transparent;
+            font-size: 16px;
+
+            border: none;
+
+            cursor: pointer;
+        }
+    }
+
+    .input-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 40px;
+
+        label {
+            font-size: 14px;
+        }
+
+        input {
+            height: 40px;
+            width: 200px;
+            background: var(--color-eight-form-container);
+
+            border: none;
+            border-radius: 6px;
+
+            padding: 0px 10px;
+            border: none;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5), -.5px -.5px 0.5px rgba(0, 0, 0, 0.5);
+        }
+    }
+
+    .alert-form {
+        color: var(--text-color-error);
+        font-size: 13px;
+    }
+
+    .save {
+        height: 45px;
+        background: var(--color-accent-primary);
+        color: var(--color-two-card-template);
+
+        border: none;
+        border-radius: 8px;
+
+        box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+    }
+}
+
+.container :where(.dashboard-container) :where(.edit-container) {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--color-two-card-template);
+    padding: 30px;
+    border-radius: 10px;
+    z-index: 100;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.container :where(.dashboard-container) :where(.edit-container) :where(.edit-candidate) {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
+    .close-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h2 {
+            font-size: 18px;
+        }
+
+        button {
+            color: var(--color-accent-primary);
+            background: transparent;
+            font-size: 16px;
+
+            border: none;
+
+            cursor: pointer;
+        }
+    }
+
+    .input-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 40px;
+
+        label {
+            font-size: 14px;
+        }
+
+        input {
+            height: 40px;
+            width: 200px;
+            background: var(--color-eight-form-container);
+
+            border: none;
+            border-radius: 6px;
+
+            padding: 0px 10px;
+            border: none;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5), -.5px -.5px 0.5px rgba(0, 0, 0, 0.5);
+        }
+    }
+
+    p {
+        color: var(--text-color-error);
+        font-size: 13px;
+    }
+
+    .edit {
+        height: 45px;
+        background: var(--color-accent-primary);
+        color: var(--color-two-card-template);
+
+        border: none;
+        border-radius: 8px;
+
+        box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+    }
+}
+
 .container :where(.dashboard-container) :where(.table-wrapper) {
-    max-height: 320px;
+    height: 370px;
     padding: 0px 40px; 
     overflow-y: auto;
     overflow-x: hidden;
@@ -385,13 +564,73 @@ nav :where(form) :where(hr) {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.card :where(.status-container) :where(.status-search-container) {
+    color: var(--text-color-primary);
+    padding: 0px 50px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h2 {
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+}
+
+.card :where(.status-container) :where(.status-search-container) :where(.input-container) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+
+    button {
+        height: 40px;
+        width: 40px;
+        color: var(--color-two-card-template);
+        background: var(--color-accent-primary);
+
+        border: none;
+        border-radius: 6px;
+
+        transition: all 0.3s ease;
+    }
+
+    .search-container {
+        display: flex;
+        box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
+        border-radius: 6px;
+    
+        input {
+            height: 40px;
+            width: 200px;
+            padding: 0px 12px;
+
+            background: var(--color-eight-form-container);
+            border-top: 1px solid lightgray;
+            border-left: 1px solid lightgray;
+            border-bottom: 1px solid lightgray;
+            border-right: none;
+
+            border-top-left-radius: 6px;
+            border-bottom-left-radius: 6px;
+        }
+
+        button {
+            border-top-left-radius: 0px;
+            border-bottom-left-radius: 0px;
+        }
+    }
+}
+
 .card :where(.status-container) :where(.seperator-line) {
     margin: 25px 35px;
     border: 1px solid darkgrey;
 }
 
 .card :where(.status-container) :where(.table-wrapper) {
-    max-height: 320px;
+    height: 370px;
     padding: 0px 40px; 
     overflow-y: auto;
     overflow-x: hidden;
@@ -486,8 +725,22 @@ nav :where(form) :where(hr) {
     border-bottom-right-radius: 8px;
 }
 
-
 /* ================================ 2. END STATUS CONTAINER ================================ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
