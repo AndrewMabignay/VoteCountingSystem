@@ -110,9 +110,9 @@ class Model {
     // END NEW CHANGES
 
     // ADMIN | CANDIDATE SEARCH
-    public function search($name) {
+    public function search($input) {
         global $conn;
-        $this->query = "SELECT * FROM {$this->databaseTable} WHERE Name LIKE '%$name%'";
+        $this->query = "SELECT * FROM {$this->databaseTable} WHERE Name LIKE '%$input%' OR Position LIKE '%$input%' OR PartyList LIKE '%$input%'";
         $retrieve = \mysqli_query($conn, $this->query);
 
         $rows = [];
@@ -162,6 +162,23 @@ class Model {
         return $rows;
     }
 
+    public function candidateVoteResultSearch($input) {
+        global $conn;
+
+        $this->query = "SELECT * FROM {$this->databaseTable} c JOIN (SELECT Position, MAX(VoteCount) AS MaxVotes FROM {$this->databaseTable} GROUP BY Position) m ON c.Position = m.Position AND c.VoteCount = m.MaxVotes";
+        $retrieve = \mysqli_query($conn, $this->query);
+
+        $rows = [];
+
+        if ($retrieve && mysqli_num_rows($retrieve) > 0) {
+            while ($row = mysqli_fetch_assoc($retrieve)) {
+                $rows[] = $row;
+            }
+        } 
+
+        return $rows;
+    }
+
     // ADD NEW CHANGES
     // ADMIN | CANDIDATE UPDATE 
     public function candidateEdit($id, $name, $position, $partylist) {
@@ -171,7 +188,7 @@ class Model {
         global $conn;
 
         // CHECK FOR DUPLICATE NAME + POSITION + PARTYLIST.
-        $this->query = "SELECT * FROM {$this->databaseTable} WHERE Name = ? AND Position = ? AND PartyList = ?";
+        $this->query = "SELECT * FROM {$this->databaseTable} WHERE Name = ? AND Position = ? AND PartyList = ? AND ID != $id";
         $statement = $conn->prepare($this->query); 
         $statement->bind_param('sss', $name, $position, $partylist);   
 
@@ -179,7 +196,7 @@ class Model {
         $search = $statement->get_result();
 
         if ($search->num_rows > 0) {
-            return 'Duplicate candidate in partylist is invalid.';
+            return 'Invalid Candidate Update.';
         }
 
         $this->query = "UPDATE candidates SET Name = ?, Position = ?, PartyList = ? WHERE ID = ?";
@@ -224,29 +241,29 @@ class Model {
 
     // ADD NEW CHANGES
     // ADMIN | USER MANAGEMENT
-    public function addUser($name, $age, $address, $password, $role) {        
+    public function addUser($name, $age, $address, $username, $password, $role) {        
         global $conn;
         
         // Check if it is empty.
-        if (empty($name) || empty($age) || empty($address) || empty($password) || empty($role)) {
+        if (empty($name) || empty($age) || empty($address) || empty($username) || empty($password) || empty($role)) {
             return 'Fill up all fields!';
         }
 
         // Check for duplicate names.
         $this->query = "SELECT * FROM accounts WHERE Username = ?";
         $statement = $conn->prepare($this->query); 
-        $statement->bind_param('s', $name);   
+        $statement->bind_param('s', $username);   
 
         $statement->execute();
         $search = $statement->get_result();
 
         if ($search->num_rows > 0) {
-            return 'Duplicate names invalid';
+            return 'Duplicate username invalid';
         }
 
-        $this->query = "INSERT INTO accounts(Name, Age, Address, Password, Role) VALUES (?, ?, ?, ?, ?)";
+        $this->query = "INSERT INTO accounts(Name, Age, Address, Username, Password, Role) VALUES (?, ?, ?, ?, ?, ?)";
         $statement = $conn->prepare($this->query);
-        $statement->bind_param('sisss', $name, $age, $address, $password, $role);
+        $statement->bind_param('sissss', $name, $age, $address, $username, $password, $role);
         
         return $statement->execute() ? 'Successfully Added' : 'Not Successfully Added';
     }
@@ -277,29 +294,33 @@ class Model {
         $statement->execute();
     }
 
-    public function editUser($id, $name, $age, $address, $password, $role) {
+    public function editUser($id, $name, $age, $address, $username, $password, $role) {
         global $conn;
         
         // Check if it is empty.
-        if (empty($name) || empty($age) || empty($address) || empty($password) || empty($role)) {
+        if (empty($name) || empty($age) || empty($address) || empty($username) || empty($password) || empty($role)) {
             return 'Fill up all fields!';
         }
 
-        // Check for duplicate names.
-        $this->query = "SELECT * FROM accounts WHERE Name = ?";
+        // Check Condition.
+        if ($age < 18) {
+            return 'Invalid age.';
+        }
+
+        $this->query = "SELECT * FROM accounts WHERE Username = ? AND ID != ?";
         $statement = $conn->prepare($this->query); 
-        $statement->bind_param('s', $name);   
+        $statement->bind_param('si', $username, $id);   
 
         $statement->execute();
         $search = $statement->get_result();
 
         if ($search->num_rows > 0) {
-            return 'Duplicate names invalid';
+            return 'Duplicate username invalid';
         }
 
-        $this->query = "UPDATE accounts SET Name = ?, Age = ?, Address = ?, Password = ?, Role = ? WHERE ID = ?";
+        $this->query = "UPDATE accounts SET Name = ?, Age = ?, Address = ?, Username = ?, Password = ?, Role = ? WHERE ID = ?";
         $statement = $conn->prepare($this->query);
-        $statement->bind_param('sisssi', $name, $age, $address, $password, $role, $id);
+        $statement->bind_param('sissssi', $name, $age, $address, $username, $password, $role, $id);
 
         if ($statement->execute()) {
             if ($statement->affected_rows > 0) {

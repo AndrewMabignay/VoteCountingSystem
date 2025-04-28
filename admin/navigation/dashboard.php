@@ -102,7 +102,7 @@ $data = $showCandidates->index();
 
         <!-- HEADER CANDIDATES CONTAINER -->
         <form action="adminPanel.php" method="POST" class="candidates-container">
-            <h2>List of Candidates</h1>
+            <h2>List of Candidates</h2>
 
             <input type="hidden" name="dashboard" value="1">
 
@@ -340,6 +340,8 @@ $data = $showCandidates->index();
                     <?php if (isset($updateCondition)): ?>
                         <?php if ($updateCondition == 'Successfully Updated!'): ?>
                             <p style="color: green"><?php echo $updateCondition ?></p>
+                        <?php elseif ($updateCondition == 'No changes made.'): ?>
+                            <p style="color: black"><?php echo $updateCondition ?></p>
                         <?php else: ?>
                             <p><?php echo $updateCondition ?></p>
                         <?php endif; ?>

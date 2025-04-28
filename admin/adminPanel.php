@@ -26,7 +26,7 @@ if (isset($_POST['status']) || $page == 'status') {
     ob_start();
     include('navigation/result.php');
     $content = ob_get_clean();
-} else if (isset($_POST['dashboard'])) {
+} else if (isset($_POST['dashboard']) || $page == 'dashboard') {
     ob_start();
     include('navigation/dashboard.php');
     $content = ob_get_clean();
@@ -34,11 +34,7 @@ if (isset($_POST['status']) || $page == 'status') {
     ob_start();
     include('navigation/userRecords.php'); 
     $content = ob_get_clean();
-} else if (!isset($_POST['dashboard'])) {
-    ob_start();
-    include('navigation/dashboard.php'); // FOR DEFAULT
-    $content = ob_get_clean();
-} 
+}
 
 ?>
 
