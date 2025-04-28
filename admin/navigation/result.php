@@ -71,12 +71,12 @@
                 <tbody>
                     <?php if (isset($searchField) && $searchField != '') : ?>
                         <?php if (isset($dataStatus) && count($dataStatus) > 0): ?>
-                            <?php foreach($dataStatus as $candidatesStatus): ?>
+                            <?php foreach($dataStatus as $candidatesResult): ?>
                                 <tr>
-                                    <td><?php echo $candidatesStatus['Name'] ?></td>
-                                    <td><?php echo $candidatesStatus['Position'] ?></td>
-                                    <td><?php echo $candidatesStatus['PartyList'] ?></td>
-                                    <td><?php echo $candidatesStatus['MaxVotes'] ?></td>
+                                    <td><?php echo $candidatesResult['Name'] ?></td>
+                                    <td><?php echo $candidatesResult['Position'] ?></td>
+                                    <td><?php echo $candidatesResult['PartyList'] ?></td>
+                                    <td><?php echo $candidatesResult['MaxVotes'] ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>

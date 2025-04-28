@@ -6,7 +6,7 @@ if (!isset($_SESSION['id'])):
     header("Location: ../../auth/login.php");
     exit;
 elseif ($_SESSION['role'] !== "User"):
-    header("Location: ../../admin/adminPanel.php");
+    header("Location: ../../admin/adminPanel.php?page=dashboard");
     exit;
 endif;   
 

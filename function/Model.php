@@ -50,6 +50,7 @@ class Model {
                 $_SESSION['name'] = $users['Name'];
                 $_SESSION['age'] = $users['Age'];
                 $_SESSION['address'] = $users['Address'];
+                $_SESSION['username'] = $users['Username'];
                 $_SESSION['password'] = $users['Password'];
                 $_SESSION['role'] = $users['Role'];
 
@@ -165,7 +166,7 @@ class Model {
     public function candidateVoteResultSearch($input) {
         global $conn;
 
-        $this->query = "SELECT * FROM {$this->databaseTable} c JOIN (SELECT Position, MAX(VoteCount) AS MaxVotes FROM {$this->databaseTable} GROUP BY Position) m ON c.Position = m.Position AND c.VoteCount = m.MaxVotes";
+        $this->query = "SELECT * FROM {$this->databaseTable} c JOIN (SELECT Position, MAX(VoteCount) AS MaxVotes FROM {$this->databaseTable} GROUP BY Position) m ON c.Position = m.Position AND c.VoteCount = m.MaxVotes WHERE Name LIKE '%$input%'";
         $retrieve = \mysqli_query($conn, $this->query);
 
         $rows = [];

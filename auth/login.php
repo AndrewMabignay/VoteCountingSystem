@@ -10,7 +10,7 @@ if (isset($_SESSION['id'])) {
     
     switch ($_SESSION['role']) {
         case "Admin":
-            header("Location: ../admin/adminPanel.php");
+            header("Location: ../admin/adminPanel.php?page=dashboard");
             exit;
         case "User":
             header("Location: ../client/standard.php");

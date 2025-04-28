@@ -83,7 +83,10 @@ body {
 }
 
 .vote-container :where(.table-wrapper) {
-    padding: 0px 30px;
+    height: 370px;
+    padding: 0px 40px; 
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .vote-container :where(.table-wrapper) :where(table) {    
