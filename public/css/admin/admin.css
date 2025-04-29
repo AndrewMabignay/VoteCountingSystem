@@ -404,7 +404,7 @@ nav :where(form) :where(hr) {
 }
 
 .container :where(.dashboard-container) :where(.table-wrapper) {
-    height: 370px;
+    height: 350px;
     padding: 0px 40px; 
     overflow-y: auto;
     overflow-x: hidden;
@@ -630,7 +630,7 @@ nav :where(form) :where(hr) {
 }
 
 .card :where(.status-container) :where(.table-wrapper) {
-    height: 370px;
+    height: 350px;
     padding: 0px 40px; 
     overflow-y: auto;
     overflow-x: hidden;
@@ -843,7 +843,7 @@ nav :where(form) :where(hr) {
 }
 
 .result-container :where(.result-container-inner) :where(.table-wrapper) {
-    height: 370px;
+    height: 350px;
     padding: 0px 40px; 
     overflow-y: auto;
     overflow-x: hidden;
@@ -1263,7 +1263,7 @@ nav :where(form) :where(hr) {
 }
 
 .user-container :where(.user-container-main) :where(.table-wrapper) {
-    height: 370px;
+    height: 350px;
     padding: 0px 40px; 
     overflow-y: auto;
     overflow-x: hidden;
