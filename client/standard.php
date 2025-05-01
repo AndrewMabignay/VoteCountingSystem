@@ -32,7 +32,7 @@ if (isset($_POST['vote'])) {
 
     // Insert vote logic
     $voteCountAdded = new Model();
-    $voteCountAdded->castVote($accountID, $id, $position);
+    $voteCountAdded->castVote($accountID, $id, $position, $positionLimits);
 }
 
 // Get list of candidates
@@ -98,7 +98,7 @@ $votedCandidateIDs = $listCandidates->getUserVotedCandidateIDs($accountID);
                                     <input type="hidden" name="position" value="<?php echo $rows['Position']; ?>">
                                     <input type="hidden" name="partyList" value="<?php echo $rows['PartyList']; ?>">
                                     <input type="hidden" name="voteCount" value="<?php echo $rows['VoteCount']; ?>">
-                                    <button type="submit" name="vote" <?php echo $isDisabled ? 'disabled' : ''; ?> class="vote-button">
+                                    <button type="submit" name="vote" <?php echo $isDisabled ? 'disabled' : ''; ?>>
                                         <?php echo $isDisabled ? 'Voted' : 'Vote'; ?>
                                     </button>
                                 </form>
