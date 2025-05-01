@@ -39,3 +39,15 @@ ALTER TABLE accounts MODIFY COLUMN Username VARCHAR(255) NOT NULL UNIQUE;
 INSERT INTO accounts(Name, Age, Address, Username, Password, Role) VALUES
 ('admin', 21, 'Binangonan, Rizal', 'admin', 'admin', 'Admin'),
 ('user', 21, 'Angono, Rizal', 'user', 'user', 'User');
+
+
+
+CREATE TABLE votes (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    candidate_id INT NOT NULL,
+    position VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES accounts(ID),
+    FOREIGN KEY (candidate_id) REFERENCES candidates(ID)
+);

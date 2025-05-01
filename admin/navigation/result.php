@@ -11,9 +11,9 @@
         $searchField = $_POST['candidateSearchStatus'];
      
         require_once '../function/Model.php';
-        $searchCandidateStatus = new Model();
-        $searchCandidateStatus->setDatabaseTable('candidates');
-        $dataStatus = $searchCandidateStatus->candidateVoteResultSearch($searchField);
+        $searchCandidateResult = new Model();
+        $searchCandidateResult->setDatabaseTable('candidates');
+        $dataResult = $searchCandidateResult->candidateVoteResultSearch($searchField);
     }
 
     if (isset($_POST['refresh'])) {
@@ -26,8 +26,11 @@
 
     $resultCandidates = new Model();
     $resultCandidates->setDatabaseTable('candidates');
-    $data = $resultCandidates->candidateVoteResult();
+    $result = $resultCandidates->candidateVoteResult();
 ?>
+
+
+
 
 <div class="result-container">
     <header class="result-header">
@@ -35,13 +38,13 @@
     </header>
 
     <div class="result-container-inner">
-        <form action="" class="result-search-container" method="POST">
+        <form action="adminPanel.php?page=result" class="result-search-container" method="POST">
             <input type="hidden" name="result" value="1">
 
             <h2>Election Results</h2>
             <div class="input-container">
                 <div class="search-container">
-                    <input type="text" name="candidateSearchStatus">
+                    <input type="text" name="candidateSearchStatus" id="search">
                     <button type="submit" name="searchCandidateResult">
                         <label for="">
                             <i class="fas fa-search"></i>
@@ -59,56 +62,87 @@
         <hr class="seperator-line">
 
         <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Position</th>
-                        <th>Party List</th>
-                        <th>Total Votes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (isset($searchField) && $searchField != '') : ?>
-                        <?php if (isset($dataStatus) && count($dataStatus) > 0): ?>
-                            <?php foreach($dataStatus as $candidatesResult): ?>
+            <?php if (isset($searchField) && $searchField != ''):  ?>
+                <?php if (isset($dataResult) && count($dataResult) > 0): ?>
+                    <?php foreach ($dataResult as $position => $candidates): ?>
+                        <h2><?php echo $position; ?></h2>
+                        <table>
+                            <thead>
                                 <tr>
-                                    <td><?php echo $candidatesResult['Name'] ?></td>
-                                    <td><?php echo $candidatesResult['Position'] ?></td>
-                                    <td><?php echo $candidatesResult['PartyList'] ?></td>
-                                    <td><?php echo $candidatesResult['MaxVotes'] ?></td>
+                                    <th>Rank</th>
+                                    <th>Name</th>
+                                    <th>Party List</th>
+                                    <th>Total Votes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($candidates as $row): ?>
+                                    <tr>
+                                        <td><?php echo $row['Ranking'] ?></td>
+                                        <td><?php echo $row['Name'] ?></td>
+                                        <td><?php echo $row['PartyList'] ?></td>
+                                        <td><?php echo $row['VoteCount'] ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    <?php endforeach; ?>
+                <?php else:  ?>
+                    <p id="prompt">
+                        No candidates found.
+                    </p>
+                <?php endif; ?>
+            <?php elseif (isset($searchCandidateResult) && $searchField == ''): ?>
+                <p id="prompt">No candidates found.</p>
+            <?php elseif (isset($refreshTable) && $refreshTable == true): ?>
+                <?php foreach ($result as $position => $candidates): ?>
+                    <h2><?php echo $position; ?></h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Name</th>
+                                <th>Party List</th>
+                                <th>Total Votes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($candidates as $row): ?>
+                                <tr>
+                                    <td><?php echo $row['Ranking'] ?></td>
+                                    <td><?php echo $row['Name'] ?></td>
+                                    <td><?php echo $row['PartyList'] ?></td>
+                                    <td><?php echo $row['VoteCount'] ?></td>
                                 </tr>
                             <?php endforeach; ?>
-                        <?php else: ?>
+                        </tbody>
+                    </table>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <?php foreach ($result as $position => $candidates): ?>
+                    <h2><?php echo $position; ?></h2>
+                    <table>
+                        <thead>
                             <tr>
-                                <td colspan="4" style="text-align: center;">No candidates found.</td>
+                                <th>Rank</th>
+                                <th>Name</th>
+                                <th>Party List</th>
+                                <th>Total Votes</th>
                             </tr>
-                        <?php endif; ?>
-                    <?php elseif (isset($searchCandidateStatus) && $searchField == ''): ?>
-                        <tr>
-                            <td colspan="4" style="text-align: center;">No candidates found.</td>
-                        </tr>
-                    <?php elseif(isset($refreshTable) && $refreshTable == true): ?>
-                        <?php foreach($data as $candidatesStatus): ?>
-                            <tr>
-                                <td><?php echo $candidatesStatus['Name'] ?></td>
-                                <td><?php echo $candidatesStatus['Position'] ?></td>
-                                <td><?php echo $candidatesStatus['PartyList'] ?></td>
-                                <td><?php echo $candidatesStatus['MaxVotes'] ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <?php foreach($data as $candidates): ?>
-                            <tr>
-                                <td><?php echo $candidates['Name'] ?></td>
-                                <td><?php echo $candidates['Position'] ?></td>
-                                <td><?php echo $candidates['PartyList'] ?></td>
-                                <td><?php echo $candidates['MaxVotes'] ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($candidates as $row): ?>
+                                <tr>
+                                    <td><?php echo $row['Ranking'] ?></td>
+                                    <td><?php echo $row['Name'] ?></td>
+                                    <td><?php echo $row['PartyList'] ?></td>
+                                    <td><?php echo $row['VoteCount'] ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </div>
 </div>

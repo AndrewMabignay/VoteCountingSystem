@@ -20,7 +20,171 @@ body {
     align-items: center;
 }
 
-@keyframes fadeSlideIn {
+.vote-container {
+    width: 80%;
+    background: var(--color-two-card-template);
+    color: var(--text-color-primary); 
+    padding: 30px 0px;
+
+    border: none;
+    border-radius: 12px;
+
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
+    h2 {
+        font-size: 20px;
+    }
+}
+
+.vote-container :where(.logout) {
+    padding: 0px 80px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.vote-container :where(.logout) :where(button) {
+    background: var(--color-accent-primary);
+    height: 40px;
+    width: 120px;
+    font-size: 14px;
+    color: var(--color-two-card-template);
+
+    border: 1px solid var(--color-three-border);
+    border-radius: 6px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    transition: all 0.3s ease;
+}
+
+.vote-container :where(.logout) :where(button):hover {
+    background: var(--color-accent-hover);
+    cursor: pointer;
+}
+
+.vote-container :where(.table-wrapper) {
+    height: 350px;
+    padding: 0px 40px; 
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.vote-container :where(.table-wrapper)::-webkit-scrollbar {
+    width: 8px; 
+}
+  
+.vote-container :where(.table-wrapper)::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+    border-radius: 10px;
+}
+  
+.vote-container :where(.table-wrapper)::-webkit-scrollbar-thumb {
+    background: var(--color-accent-primary); 
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+  
+.vote-container :where(.table-wrapper)::-webkit-scrollbar-thumb:hover {
+    background: var(--color-accent-hover); 
+}
+  
+@keyframes fadeSlideInStatus {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.vote-container :where(.table-wrapper) :where(table) {
+    width: 100%;
+    padding: 0px 20px;
+    border-collapse: separate;
+    border-spacing: 0 18px;
+    border: none;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.vote-container :where(.table-wrapper) :where(table) :where(thead) {
+    color: #1E293B;;
+}
+
+.vote-container :where(.table-wrapper) :where(table) :where(tbody) :where(tr) {
+    background: #F8FAFC;
+    border-radius: 8px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2), 
+                -1px -1px 1px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transition: all 0.3s ease;   
+    animation: fadeSlideInStatus 0.6s ease forwards;
+}
+
+.vote-container :where(.table-wrapper) :where(table) :where(tbody) :where(tr:hover) {
+    background: #EEF2FF;   
+}
+
+.vote-container :where(.table-wrapper) :where(table) :where(thead, tbody) :where(tr) :where(th, td) {
+    /* border: 1px solid #E2E8F0; */
+    width: 100px;
+    height: 50px;
+    margin-bottom: 10px;
+
+    font-size: 14px;
+}
+
+.vote-container :where(.table-wrapper) :where(table) :where(thead, tbody) :where(tr) :where(th) {
+    border-bottom: 1px solid lightgray;
+}
+
+.vote-container :where(.table-wrapper) :where(table) :where(thead, tbody) :where(tr) :where(td) :where(form) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.vote-container :where(.table-wrapper) :where(table) :where(tbody) :where(tr) :where(td:first-child) {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.vote-container :where(.table-wrapper) :where(table) :where(tbody) :where(tr) :where(td:last-child) {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.vote-container :where(.table-wrapper) :where(table) :where(tbody) :where(tr) :where(td) :where(form) :where(button) {
+    background: var(--color-accent-primary);
+    color: var(--color-two-card-template);
+    padding: 5px 20px;
+
+    border: none;
+    border-radius: 6px;
+}
+
+.vote-container :where(.table-wrapper) :where(table) :where(tbody) :where(tr) :where(td) :where(form) :where(button):disabled {
+    background: #C7D2FE;
+    color: var(--text-color-secondary);
+    
+}
+
+
+
+/* @keyframes fadeSlideIn {
     from {
         opacity: 0;
         transform: translateY(20px);
@@ -162,4 +326,4 @@ body {
     background: #C7D2FE;
     color: var(--text-color-secondary);
     
-}
+} */

@@ -133,48 +133,66 @@ $data = $showCandidates->index();
 
         <!-- HEADER CANDIDATES BODY -->
         <?php if (isset($searchField) && $searchField != ''): ?>
-        <div class="table-wrapper" id="candidateTable">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Position</th>
-                        <th>Party List</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (isset($dataCandidate) && count($dataCandidate) > 0): ?>
-                        <?php foreach($dataCandidate as $candidatesSearch): ?>
-                            <tr>
-                                <td><?php echo $candidatesSearch['Name']; ?></td>
-                                <td><?php echo $candidatesSearch['Position']; ?></td>
-                                <td><?php echo $candidatesSearch['PartyList']; ?></td>
-                                <td>
-                                    <form action="adminPanel.php" method="POST">
-                                        <input type="hidden" value="<?php echo $candidatesSearch['ID']; ?>" name="id">
-                                        <input type="hidden" value="<?php echo $candidatesSearch['Name']; ?>" name="name">
-                                        <input type="hidden" value="<?php echo $candidatesSearch['Position']; ?>" name="position">
-                                        <input type="hidden" value="<?php echo $candidatesSearch['PartyList']; ?>" name="partylist">
-                                        <button type="submit" name="edit">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button type="submit" name="delete" onclick="return confirm('Are you sure you want to delete this candidate?');">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
+            <div class="table-wrapper" id="candidateTable">
+                <table>
+                    <thead>
                         <tr>
-                            <td colspan="5" style="text-align: center;">No candidates found.</td>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Party List</th>
+                            <th>Action</th>
                         </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
-        <?php elseif(!isset($searchField)): ?>
+                    </thead>
+                    <tbody>
+                        <?php if (isset($dataCandidate) && count($dataCandidate) > 0): ?>
+                            <?php foreach($dataCandidate as $candidatesSearch): ?>
+                                <tr>
+                                    <td><?php echo $candidatesSearch['Name']; ?></td>
+                                    <td><?php echo $candidatesSearch['Position']; ?></td>
+                                    <td><?php echo $candidatesSearch['PartyList']; ?></td>
+                                    <td>
+                                        <form action="adminPanel.php" method="POST">
+                                            <input type="hidden" value="<?php echo $candidatesSearch['ID']; ?>" name="id">
+                                            <input type="hidden" value="<?php echo $candidatesSearch['Name']; ?>" name="name">
+                                            <input type="hidden" value="<?php echo $candidatesSearch['Position']; ?>" name="position">
+                                            <input type="hidden" value="<?php echo $candidatesSearch['PartyList']; ?>" name="partylist">
+                                            <button type="submit" name="edit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button type="submit" name="delete" onclick="return confirm('Are you sure you want to delete this candidate?');">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="5" style="text-align: center;">No candidates found.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php elseif(isset($searchField) && $searchField == ''): ?>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Party List</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4" style="text-align: center;">No candidates found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        <?php elseif(isset($refreshTable) && $refreshTable == true): ?>
             <div class="table-wrapper">
                 <table>
                     <thead>
@@ -210,7 +228,7 @@ $data = $showCandidates->index();
                     </tbody>
                 </table>
             </div>
-        <?php elseif(isset($refreshTable) && $refreshTable == true): ?>
+        <?php else: ?>
             <div class="table-wrapper">
                 <table>
                     <thead>
@@ -252,7 +270,7 @@ $data = $showCandidates->index();
         <?php if (isset($name)): ?>
             <div class="overlay"></div>
             <div class="add-container">
-                <form action="adminPanel.php" method="POST" class="add-candidate">
+                <form action="adminPanel.php?page=dashboard" method="POST" class="add-candidate">
                     <input type="hidden" name="dashboard" value="1">
                     
                     <div class="close-container">
@@ -309,7 +327,7 @@ $data = $showCandidates->index();
         <?php if (isset($editName)): ?>
             <div class="overlay"></div>
             <div class="edit-container">                
-                <form action="adminPanel.php" method="POST" class="edit-candidate">
+                <form action="adminPanel.php?page=dashboard" method="POST" class="edit-candidate">
                     <input type="hidden" name="dashboard" value="1">
 
                     <div class="close-container">

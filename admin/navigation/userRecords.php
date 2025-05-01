@@ -59,6 +59,15 @@
         $editPrompting = $editUser->editUser($editUserID, $editUserName, $editUserAge, $editUserAddress, $editUserUsername, $editUserPassword, $editUserRole);   
     }
 
+    if (isset($_POST['search'])) {
+        $userSearch = $_POST['userSearch'];
+
+        require_once '../function/Model.php';
+        $searchUser = new Model();
+        $searchUser->setDatabaseTable('candidates');
+        $dataUser = $searchUser->searchUser($userSearch);
+    }
+
     if (isset($_POST['userDelete'])) {
         $deleteUserId = $_POST['userId'];
     
@@ -66,6 +75,12 @@
         $deleteUser = new Model();
         $deleteUser->setDatabaseTable('accounts');
         $deleteUser->deleteUser($deleteUserId);
+    }
+
+    if (isset($_POST['refresh'])) {
+        require_once '../function/Model.php';
+    
+        $refreshTable = true;
     }
 
     require_once '../function/Model.php';
@@ -89,7 +104,7 @@
             <div class="button-container">
                 <!-- SEARCH CONTAINER -->
                 <div class="search-container">
-                    <input type="text" name="candidateSearchStatus">
+                    <input type="text" name="userSearch">
                     <button type="submit" name="search">
                         <label for="">
                             <i class="fas fa-search"></i>
@@ -119,58 +134,161 @@
                         <th>Age</th>
                         <th>Address</th>
                         <th>Username</th>
-                        <th>Password</th>
                         <th>Role</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody class="<?php echo isset($editUserName) ? 'no-animation' : ''; ?>">
-                    <?php foreach($data as $user): ?>
+
+                    <?php if (isset($userSearch) && $userSearch != ''): ?>
+                        <?php if (isset($dataUser) && count($dataUser) > 0): ?>
+                            <?php foreach($dataUser as $user): ?>
+                                <tr>
+                                    <td><?php echo $user['Name'] ?></td>
+                                    <td><?php echo $user['Age'] ?></td>
+                                    <td><?php echo $user['Address'] ?></td>
+                                    <td><?php echo $user['Username'] ?></td>
+                                    <td><?php echo $user['Role'] ?></td>
+                                    <td>
+                                        <form action="" method="POST">
+                                            <input type="hidden" name="users" value="1">
+                                        
+                                            <!-- ID -->
+                                            <input type="hidden" value="<?php echo $user['ID']; ?>" name="userId">
+
+                                            <!-- NAME -->
+                                            <input type="hidden" value="<?php echo $user['Name']; ?>" name="userName">
+                                            
+                                            <!-- AGE -->
+                                            <input type="hidden" value="<?php echo $user['Age']; ?>" name="userAge">
+                                            
+                                            <!-- ADDRESS -->
+                                            <input type="hidden" value="<?php echo $user['Address']; ?>" name="userAddress">
+
+                                            <!-- USERNAME -->
+                                            <input type="hidden" value="<?php echo $user['Username']; ?>" name="userUsername">
+
+                                            <!-- PASSWORD -->
+                                            <input type="hidden" value="<?php echo $user['Password']; ?>" name="userPassword">
+
+                                            <!-- ROLE -->
+                                            <select name="userRole" id="role" style="display: none;">
+                                                <option value="User" <?php echo ($user['Role'] == 'User') ? 'selected' : ''; ?>>User</option>
+                                                <option value="Admin" <?php echo ($user['Role'] == 'Admin') ? 'selected' : ''; ?>>Admin</option>
+                                            </select>
+                                            
+                                            <button type="submit" name="userEdit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button type="submit" name="userDelete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="6" style="text-align: center;">No users found.</td>
+                            </tr>    
+                        <?php endif; ?>
+                    <?php elseif (isset($searchUser) && $userSearch == ''): ?>
                         <tr>
-                            <td><?php echo $user['Name'] ?></td>
-                            <td><?php echo $user['Age'] ?></td>
-                            <td><?php echo $user['Address'] ?></td>
-                            <td><?php echo $user['Username'] ?></td>
-                            <td><?php echo substr(md5($user['Password']), 0, 8); ?></td>
-                            <td><?php echo $user['Role'] ?></td>
-                            <td>
-                                <form action="" method="POST">
-                                    <input type="hidden" name="users" value="1">
-                                
-                                    <!-- ID -->
-                                    <input type="hidden" value="<?php echo $user['ID']; ?>" name="userId">
-
-                                    <!-- NAME -->
-                                    <input type="hidden" value="<?php echo $user['Name']; ?>" name="userName">
-                                    
-                                    <!-- AGE -->
-                                    <input type="hidden" value="<?php echo $user['Age']; ?>" name="userAge">
-                                    
-                                    <!-- ADDRESS -->
-                                    <input type="hidden" value="<?php echo $user['Address']; ?>" name="userAddress">
-
-                                    <!-- USERNAME -->
-                                    <input type="hidden" value="<?php echo $user['Username']; ?>" name="userUsername">
-
-                                    <!-- PASSWORD -->
-                                    <input type="hidden" value="<?php echo $user['Password']; ?>" name="userPassword">
-
-                                    <!-- ROLE -->
-                                    <select name="userRole" id="role" style="display: none;">
-                                        <option value="User" <?php echo ($user['Role'] == 'User') ? 'selected' : ''; ?>>User</option>
-                                        <option value="Admin" <?php echo ($user['Role'] == 'Admin') ? 'selected' : ''; ?>>Admin</option>
-                                    </select>
-                                    
-                                    <button type="submit" name="userEdit">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button type="submit" name="userDelete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
+                            <td colspan="6" style="text-align: center;">No users found.</td>
                         </tr>
-                    <?php endforeach; ?>
+                    <?php elseif (isset($refreshTable) && $refreshTable == true): ?>
+                        <?php foreach($data as $user): ?>
+                            <tr>
+                                <td><?php echo $user['Name'] ?></td>
+                                <td><?php echo $user['Age'] ?></td>
+                                <td><?php echo $user['Address'] ?></td>
+                                <td><?php echo $user['Username'] ?></td>
+                                <td><?php echo $user['Role'] ?></td>
+                                <td>
+                                    <form action="" method="POST">
+                                        <input type="hidden" name="users" value="1">
+                                    
+                                        <!-- ID -->
+                                        <input type="hidden" value="<?php echo $user['ID']; ?>" name="userId">
+
+                                        <!-- NAME -->
+                                        <input type="hidden" value="<?php echo $user['Name']; ?>" name="userName">
+                                        
+                                        <!-- AGE -->
+                                        <input type="hidden" value="<?php echo $user['Age']; ?>" name="userAge">
+                                        
+                                        <!-- ADDRESS -->
+                                        <input type="hidden" value="<?php echo $user['Address']; ?>" name="userAddress">
+
+                                        <!-- USERNAME -->
+                                        <input type="hidden" value="<?php echo $user['Username']; ?>" name="userUsername">
+
+                                        <!-- PASSWORD -->
+                                        <input type="hidden" value="<?php echo $user['Password']; ?>" name="userPassword">
+
+                                        <!-- ROLE -->
+                                        <select name="userRole" id="role" style="display: none;">
+                                            <option value="User" <?php echo ($user['Role'] == 'User') ? 'selected' : ''; ?>>User</option>
+                                            <option value="Admin" <?php echo ($user['Role'] == 'Admin') ? 'selected' : ''; ?>>Admin</option>
+                                        </select>
+                                        
+                                        <button type="submit" name="userEdit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button type="submit" name="userDelete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <?php foreach($data as $user): ?>
+                            <tr>
+                                <td><?php echo $user['Name'] ?></td>
+                                <td><?php echo $user['Age'] ?></td>
+                                <td><?php echo $user['Address'] ?></td>
+                                <td><?php echo $user['Username'] ?></td>
+                                <td><?php echo $user['Role'] ?></td>
+                                <td>
+                                    <form action="" method="POST">
+                                        <input type="hidden" name="users" value="1">
+                                    
+                                        <!-- ID -->
+                                        <input type="hidden" value="<?php echo $user['ID']; ?>" name="userId">
+
+                                        <!-- NAME -->
+                                        <input type="hidden" value="<?php echo $user['Name']; ?>" name="userName">
+                                        
+                                        <!-- AGE -->
+                                        <input type="hidden" value="<?php echo $user['Age']; ?>" name="userAge">
+                                        
+                                        <!-- ADDRESS -->
+                                        <input type="hidden" value="<?php echo $user['Address']; ?>" name="userAddress">
+
+                                        <!-- USERNAME -->
+                                        <input type="hidden" value="<?php echo $user['Username']; ?>" name="userUsername">
+
+                                        <!-- PASSWORD -->
+                                        <input type="hidden" value="<?php echo $user['Password']; ?>" name="userPassword">
+
+                                        <!-- ROLE -->
+                                        <select name="userRole" id="role" style="display: none;">
+                                            <option value="User" <?php echo ($user['Role'] == 'User') ? 'selected' : ''; ?>>User</option>
+                                            <option value="Admin" <?php echo ($user['Role'] == 'Admin') ? 'selected' : ''; ?>>Admin</option>
+                                        </select>
+                                        
+                                        <button type="submit" name="userEdit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button type="submit" name="userDelete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>

@@ -624,6 +624,11 @@ nav :where(form) :where(hr) {
     }
 }
 
+.card :where(.status-container) :where(.status-search-container) :where(.input-container) :where(.search-container) :where(input:focus) {
+    outline: none;
+    box-shadow: none;
+}
+
 .card :where(.status-container) :where(.seperator-line) {
     margin: 25px 35px;
     border: 1px solid darkgrey;
@@ -847,6 +852,39 @@ nav :where(form) :where(hr) {
     padding: 0px 40px; 
     overflow-y: auto;
     overflow-x: hidden;
+
+    h2 {
+        height: 50px;
+        background-color: var(--color-accent-primary);
+        color: #FFFFFF;
+
+        border-radius: 6px;
+
+        font-size: 17px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    p {
+        height: 50px;
+        background: #F8FAFC;
+        color: #000000;
+        font-size: 14px;
+
+        border: 1px solid lightgray;
+        border-radius: 8px;
+
+        box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2), -1px -1px 1px rgba(0, 0, 0, 0.1);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 }
 
 .result-container :where(.result-container-inner) :where(.table-wrapper)::-webkit-scrollbar {
@@ -1381,3 +1419,27 @@ nav :where(form) :where(hr) {
 }
 
 /* ================================ 4. END USER MANAGEMENT CONTAINER ================================ */
+
+
+/* ADDITIONAL */
+#search:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+@keyframes fadeSlideInPrompt {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#prompt {
+    opacity: 0;
+    transition: all 0.3s ease;   
+    animation: fadeSlideInPrompt 0.6s ease forwards;   
+}

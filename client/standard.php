@@ -57,7 +57,7 @@ $data = $listCandidates->candidateList();
 <body>
     <div class="vote-container">
         <form action="standard.php" method="POST" class="logout">
-            <h2>Voting</h2>
+            <h2>Candidate Selection</h2>
             <button type="submit" name="logout">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </button>
@@ -126,6 +126,7 @@ $data = $listCandidates->candidateList();
             });
         });
     </script>
+    
 
 
 </body>

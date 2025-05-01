@@ -146,38 +146,111 @@ class Model {
     }
 
     // ADMIN | CANDIDATE RESULT
+    // public function candidateVoteResult() {
+    //     global $conn;
+
+    //     $this->query = "SELECT * FROM {$this->databaseTable} c 
+    //     JOIN (
+    //         SELECT Position, MAX(VoteCount) AS MaxVotes 
+    //         FROM {$this->databaseTable} 
+    //         GROUP BY Position
+    //     ) m 
+    //     ON c.Position = m.Position AND c.VoteCount = m.MaxVotes";
+    //     $retrieve = \mysqli_query($conn, $this->query);
+
+    //     $grouped = [];
+
+    //     if ($retrieve && mysqli_num_rows($retrieve) > 0) {
+    //         while ($row = mysqli_fetch_assoc($retrieve)) {
+    //             $position = $row['Position'];
+    //             $grouped[$position][] = $row;
+    //         }
+    //     } 
+
+    //     return $grouped;
+    // }
+
     public function candidateVoteResult() {
         global $conn;
 
-        $this->query = "SELECT * FROM {$this->databaseTable} c JOIN (SELECT Position, MAX(VoteCount) AS MaxVotes FROM {$this->databaseTable} GROUP BY Position) m ON c.Position = m.Position AND c.VoteCount = m.MaxVotes";
-        $retrieve = \mysqli_query($conn, $this->query);
+        $this->query = "
+            SELECT *
+            FROM (
+                SELECT 
+                    c.*, 
+                    RANK() OVER (PARTITION BY c.Position ORDER BY c.VoteCount DESC) AS Ranking
+                FROM {$this->databaseTable} c
+            ) AS ranked
+            WHERE 
+                CASE
+                    WHEN ranked.Position = 'Senator' THEN ranked.Ranking <= 12
+                    WHEN ranked.Position = 'Counsilor' THEN ranked.Ranking <= 10
+                    WHEN ranked.Position = 'President' THEN ranked.Ranking = 1
+                    ELSE ranked.Ranking = 1
+                END
+            ORDER BY 
+                CASE ranked.Position
+                    WHEN 'President' THEN 1
+                    WHEN 'Senator' THEN 2
+                    WHEN 'Counselor' THEN 3
+                    ELSE 999
+                END,
+                ranked.Ranking
+        ";
 
-        $rows = [];
+        $retrieve = mysqli_query($conn, $this->query);
+        $grouped = [];
 
         if ($retrieve && mysqli_num_rows($retrieve) > 0) {
             while ($row = mysqli_fetch_assoc($retrieve)) {
-                $rows[] = $row;
+                $position = $row['Position'];
+                $grouped[$position][] = $row;
             }
-        } 
+        }
 
-        return $rows;
+        return $grouped;
     }
+
 
     public function candidateVoteResultSearch($input) {
         global $conn;
 
-        $this->query = "SELECT * FROM {$this->databaseTable} c JOIN (SELECT Position, MAX(VoteCount) AS MaxVotes FROM {$this->databaseTable} GROUP BY Position) m ON c.Position = m.Position AND c.VoteCount = m.MaxVotes WHERE Name LIKE '%$input%'";
-        $retrieve = \mysqli_query($conn, $this->query);
+        $this->query = "
+            SELECT *
+            FROM (
+                SELECT 
+                    c.*, 
+                    RANK() OVER (PARTITION BY c.Position ORDER BY c.VoteCount DESC) AS Ranking
+                FROM {$this->databaseTable} c
+            ) AS ranked
+            WHERE 
+                CASE
+                    WHEN ranked.Position = 'Senator' THEN ranked.Ranking <= 12
+                    WHEN ranked.Position = 'Counsilor' THEN ranked.Ranking <= 10
+                    WHEN ranked.Position = 'President' THEN ranked.Ranking = 1
+                    ELSE ranked.Ranking = 1
+                END AND ranked.Name LIKE '%{$input}%'
+            ORDER BY 
+                CASE ranked.Position
+                    WHEN 'President' THEN 1
+                    WHEN 'Senator' THEN 2
+                    WHEN 'Counselor' THEN 3
+                    ELSE 999
+                END,
+                ranked.Ranking
+        ";
 
-        $rows = [];
+        $retrieve = mysqli_query($conn, $this->query);
+        $grouped = [];
 
         if ($retrieve && mysqli_num_rows($retrieve) > 0) {
             while ($row = mysqli_fetch_assoc($retrieve)) {
-                $rows[] = $row;
+                $position = $row['Position'];
+                $grouped[$position][] = $row;
             }
-        } 
+        }
 
-        return $rows;
+        return $grouped;
     }
 
     // ADD NEW CHANGES
@@ -272,7 +345,7 @@ class Model {
     public function showUser($id) {
         global $conn;
 
-        $this->query = "SELECT * FROM accounts WHERE ID <> '$id' AND Name <> 'admin'"; 
+        $this->query = "SELECT * FROM accounts WHERE ID <> '$id' AND Username <> 'admin'"; 
         $retrieve = \mysqli_query($conn, $this->query);
 
         $rows = [];
@@ -284,6 +357,23 @@ class Model {
         } 
 
         return $rows;   
+    }
+
+    public function searchUser($input) {
+        global $conn;
+
+        $this->query = "SELECT * FROM accounts WHERE Name LIKE '%{$input}%' AND Username <> 'admin'"; 
+        $retrieve = \mysqli_query($conn, $this->query);
+
+        $rows = [];
+
+        if ($retrieve && mysqli_num_rows($retrieve) > 0) {
+            while ($row = mysqli_fetch_assoc($retrieve)) {
+                $rows[] = $row;
+            }
+        } 
+
+        return $rows;
     }
 
     public function deleteUser($id) {
@@ -352,5 +442,38 @@ class Model {
             return 'Error siya';
         }
     }
+
+    // public function userCandidateVote($userId, $candidateId, $position) {
+    //     global $conn;
+
+    //     $limits = [
+    //         'President' => 1,
+    //         'Senator' => 12,
+    //         'Counselor' => 10
+    //     ];
+
+    //     $this->query = "SELECT COUNT(*) AS vote_count FROM votes WHERE user_id = ? AND position = ?";
+    //     $statement = $conn->prepare($this->query); 
+    //     $statement->bind_param('ii', $userId, $position);
+    //     $statement->execute();
+    //     $result = $statement->get_result();
+    //     $row = $result->fetch_assoc();
+
+    //     if ($row['vote_count'] >= $limits[$position]) {
+    //         echo "Limit reached for $position!";
+    //         exit;
+    //     }
+
+    //     // Insert vote
+    //     $sql = "INSERT INTO votes (user_id, candidate_id, position) VALUES (?, ?, ?)";
+    //     $stmt = $conn->prepare($sql);
+    //     $stmt->bind_param("iis", $user_id, $candidate_id, $position);
+    //     $stmt->execute();
+
+    //     // Optional: Update vote count in candidates table
+    //     $update = $conn->prepare("UPDATE candidates SET VoteCount = VoteCount + 1 WHERE ID = ?");
+    //     $update->bind_param("i", $candidate_id);
+    //     $update->execute();
+    // }
 }
 ?>
