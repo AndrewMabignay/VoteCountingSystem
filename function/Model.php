@@ -211,6 +211,24 @@ class Model {
         return $grouped;
     }
 
+    public function candidateListTwo() {
+        global $conn;
+
+        $this->query = "SELECT * FROM {$this->databaseTable} ORDER BY Position";
+
+        $retrieve = mysqli_query($conn, $this->query);
+        $grouped = [];
+
+        if ($retrieve && mysqli_num_rows($retrieve) > 0) {
+            while ($row = mysqli_fetch_assoc($retrieve)) {
+                $position = $row['Position'];
+                $grouped[$position][] = $row;
+            }
+        }
+
+        return $grouped;
+    }
+
 
     public function candidateVoteResultSearch($input) {
         global $conn;
@@ -323,6 +341,10 @@ class Model {
             return 'Fill up all fields!';
         }
 
+        if ($age < 18) {
+            return 'Invalid age.';
+        }
+
         // Check for duplicate names.
         $this->query = "SELECT * FROM accounts WHERE Username = ?";
         $statement = $conn->prepare($this->query); 
@@ -379,10 +401,17 @@ class Model {
     public function deleteUser($id) {
         global $conn;
 
+        $this->query = "DELETE FROM votes WHERE user_id = ?";
+        $statement = $conn->prepare($this->query);
+        $statement->bind_param('i', $id);
+        $statement->execute();
+
         $this->query = "DELETE FROM accounts WHERE ID = ?";
         $statement = $conn->prepare($this->query);
         $statement->bind_param('i', $id);
         $statement->execute();
+
+        
     }
 
     public function editUser($id, $name, $age, $address, $username, $password, $role) {
@@ -443,37 +472,92 @@ class Model {
         }
     }
 
-    // public function userCandidateVote($userId, $candidateId, $position) {
-    //     global $conn;
+    // public function getUserVotesGroupedByPosition($userId) {
+    //     $stmt = $this->conn->prepare("SELECT position, COUNT(*) as vote_count FROM votes WHERE user_id = ? GROUP BY position");
+    //     $stmt->execute([$userId]);
+    //     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // }  
+    
+    public function castVote($accountID, $candidateID, $position) {
+        global $conn;
 
-    //     $limits = [
-    //         'President' => 1,
-    //         'Senator' => 12,
-    //         'Counselor' => 10
-    //     ];
+        $positionLimits = [
+            'President' => 1,
+            'Senator' => 12,
+            'Counselor' => 10
+        ];
+    
+        // STEP 1 : 
+        $this->query = "SELECT COUNT(*) AS vote_count FROM votes WHERE user_id = ? AND position = ?";
+        $statement = $conn->prepare($this->query);
+        $statement->bind_param('is', $accountID, $position);
+        $statement->execute();
 
-    //     $this->query = "SELECT COUNT(*) AS vote_count FROM votes WHERE user_id = ? AND position = ?";
-    //     $statement = $conn->prepare($this->query); 
-    //     $statement->bind_param('ii', $userId, $position);
-    //     $statement->execute();
-    //     $result = $statement->get_result();
-    //     $row = $result->fetch_assoc();
+        $result = $statement->get_result();
+        $row = $result->fetch_array();
+        $userVotes = $row['vote_count'] ?? 0;
 
-    //     if ($row['vote_count'] >= $limits[$position]) {
-    //         echo "Limit reached for $position!";
-    //         exit;
-    //     }
+        // echo $userVotes;
 
-    //     // Insert vote
-    //     $sql = "INSERT INTO votes (user_id, candidate_id, position) VALUES (?, ?, ?)";
-    //     $stmt = $conn->prepare($sql);
-    //     $stmt->bind_param("iis", $user_id, $candidate_id, $position);
-    //     $stmt->execute();
 
-    //     // Optional: Update vote count in candidates table
-    //     $update = $conn->prepare("UPDATE candidates SET VoteCount = VoteCount + 1 WHERE ID = ?");
-    //     $update->bind_param("i", $candidate_id);
-    //     $update->execute();
-    // }
+        // STEP 2 : 
+        $limit = $positionLimits[$position] ?? 1;
+    
+        if ($userVotes < $limit) {
+            // Step 3: Insert vote
+            $this->query = "INSERT INTO votes (user_id, candidate_id, position) VALUES (?, ?, ?)";
+            $statement = $conn->prepare($this->query);
+            $statement->bind_param('iis', $accountID, $candidateID, $position);
+            $statement->execute();
+            $statement->close();
+    
+            // Step 4: Update vote count in candidates table
+            $this->query = "UPDATE candidates SET VoteCount = VoteCount + 1 WHERE ID = ?";
+            $statement = $conn->prepare($this->query);
+            $statement->bind_param('i', $candidateID);
+            $statement->execute();
+            $statement->close();
+    
+            return true;
+        }
+    
+        return false;
+    }
+
+    public function getUserVotedCandidateIDs($userId) {
+        global $conn;
+    
+        $this->query = "SELECT candidate_id FROM votes WHERE user_id = ?";
+        $statement = $conn->prepare($this->query);
+        $statement->bind_param('i', $userId);
+        $statement->execute();
+        $result = $statement->get_result();
+    
+        $votedIDs = [];
+        while ($row = $result->fetch_assoc()) {
+            $votedIDs[] = $row['candidate_id'];
+        }
+    
+        return $votedIDs;
+    }
+    
+    
+    public function getUserVotesPerPosition($userId) {
+        global $conn;
+    
+        $this->query = "SELECT position, COUNT(*) as count FROM votes WHERE user_id = ? GROUP BY position";
+        $statement = $conn->prepare($this->query);
+        $statement->bind_param('i', $userId);
+        $statement->execute();
+        $result = $statement->get_result();
+    
+        $votes = [];
+        while ($row = $result->fetch_assoc()) {
+            $votes[$row['position']] = $row['count'];
+        }
+    
+        return $votes;
+    }
+    
 }
 ?>

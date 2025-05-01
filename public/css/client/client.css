@@ -72,10 +72,27 @@ body {
 }
 
 .vote-container :where(.table-wrapper) {
-    height: 350px;
+    height: 360px;
     padding: 0px 40px; 
     overflow-y: auto;
     overflow-x: hidden;
+
+    h2 {
+        height: 50px;
+        background-color: var(--color-accent-primary);
+        color: #FFFFFF;
+
+        border-radius: 6px;
+
+        font-size: 17px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+    }
 }
 
 .vote-container :where(.table-wrapper)::-webkit-scrollbar {

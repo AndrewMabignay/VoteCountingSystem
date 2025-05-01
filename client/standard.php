@@ -1,17 +1,20 @@
-<?php 
-
+<?php
 session_start();
-
 if (!isset($_SESSION['id'])):
     header("Location: ../../auth/login.php");
     exit;
 elseif ($_SESSION['role'] !== "User"):
     header("Location: ../../admin/adminPanel.php?page=dashboard");
     exit;
-endif;   
+endif;
 
 $accountID = $_SESSION['id'];
-// echo $accountID;
+
+$positionLimits = [
+    'President' => 1,
+    'Senator' => 12,
+    'Counselor' => 10
+];
 
 if (isset($_POST['logout'])) {
     require_once '../function/Model.php';
@@ -19,40 +22,41 @@ if (isset($_POST['logout'])) {
     $logout->logout();
 }
 
+require_once '../function/Model.php';
+
+// Check if user has already voted for a candidate in the position
 if (isset($_POST['vote'])) {
     $id = $_POST['id'];
     $voteCount = $_POST['voteCount'];
+    $position = $_POST['position'];
 
-    require_once '../function/Model.php';
+    // Insert vote logic
     $voteCountAdded = new Model();
-    $voteCountAdded->setDatabaseTable('candidates');
-    $voteCountAdded->updateCandidatesVote($id, $voteCount);
+    $voteCountAdded->castVote($accountID, $id, $position);
 }
 
-require_once '../function/Model.php';
-
+// Get list of candidates
 $listCandidates = new Model();
 $listCandidates->setDatabaseTable('candidates');
-$data = $listCandidates->candidateList();
+$data = $listCandidates->candidateListTwo();
+
+// Check how many votes the user has per position
+$userVotesPerPosition = $listCandidates->getUserVotesPerPosition($accountID);
+
+// Get already voted candidate IDs for the user
+$votedCandidateIDs = $listCandidates->getUserVotedCandidateIDs($accountID);
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-
     <!-- CSS LINKS -->
     <link rel="stylesheet" href="../public/css/general.css">
     <link rel="stylesheet" href="../public/css/client/client.css">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-    <script>
-        const currentUserID = "<?php echo $accountID; ?>";
-    </script>
 </head>
 <body>
     <div class="vote-container">
@@ -61,9 +65,11 @@ $data = $listCandidates->candidateList();
             <button type="submit" name="logout">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </button>
-        </form>        
-    
+        </form>
+
         <div class="table-wrapper">
+            <?php foreach ($data as $positioning => $candidates): ?>
+            <h2><?php echo $positioning ?></h2>
             <table>
                 <thead>
                     <tr>
@@ -74,60 +80,37 @@ $data = $listCandidates->candidateList();
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach($data as $candidates): ?>
+                    <?php foreach ($candidates as $rows): ?>
+                        <?php
+                            $position = $rows['Position'];
+                            $userVotes = $userVotesPerPosition[$position] ?? 0;
+                            $limit = $positionLimits[$position] ?? 1;
+                            $isDisabled = $userVotes >= $limit || in_array($rows['ID'], $votedCandidateIDs);
+                        ?>
                         <tr>
-                            <td><?php echo $candidates['Name'] ?></td>
-                            <td><?php echo $candidates['Position'] ?></td>
-                            <td><?php echo $candidates['PartyList'] ?></td>
+                            <td><?php echo $rows['Name']; ?></td>
+                            <td><?php echo $rows['Position']; ?></td>
+                            <td><?php echo $rows['PartyList']; ?></td>
                             <td>
-                                <form action="standard.php" method="POST" class="vote-form" data-position="<?php echo $candidates['Position']; ?>">
-                                    <input type="hidden" name="id" value="<?php echo $candidates['ID']; ?> ">    
-                                    <input type="hidden" name="name" value="<?php echo $candidates['Name']; ?> ">    
-                                    <input type="hidden" name="position" value="<?php echo $candidates['Position']; ?> ">    
-                                    <input type="hidden" name="partyList" value="<?php echo $candidates['PartyList']; ?> ">    
-                                    <input type="hidden" name="voteCount" value="<?php echo $candidates['VoteCount'] ?> ">    
-
-                                    <button type="submit" name="vote">Vote</button>
+                                <form action="standard.php" method="POST" class="vote-form" data-position="<?php echo $rows['Position']; ?>">
+                                    <input type="hidden" name="id" value="<?php echo $rows['ID']; ?>">
+                                    <input type="hidden" name="name" value="<?php echo $rows['Name']; ?>">
+                                    <input type="hidden" name="position" value="<?php echo $rows['Position']; ?>">
+                                    <input type="hidden" name="partyList" value="<?php echo $rows['PartyList']; ?>">
+                                    <input type="hidden" name="voteCount" value="<?php echo $rows['VoteCount']; ?>">
+                                    <button type="submit" name="vote" <?php echo $isDisabled ? 'disabled' : ''; ?> class="vote-button">
+                                        <?php echo $isDisabled ? 'Voted' : 'Vote'; ?>
+                                    </button>
                                 </form>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
+            <?php endforeach; ?>
         </div>
-    </div>        
+    </div>
 
-    
-
-    
     <script src="../public/js/status.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const votedKey = "votedPositions_" + currentUserID;  // Generate unique key per user ID
-            const votedPositions = JSON.parse(sessionStorage.getItem(votedKey)) || [];  // Retrieve previously voted positions
-
-            document.querySelectorAll(".vote-form").forEach(function (form) {
-                const position = form.getAttribute("data-position");
-                const voteBtn = form.querySelector("button[name='vote']");
-
-                // If the position is already voted by this user, disable the button
-                if (votedPositions.includes(position)) {
-                    voteBtn.disabled = true;
-                    voteBtn.textContent = "Voted";
-                }
-
-                // On form submit, store the voted position in sessionStorage
-                form.addEventListener("submit", function () {
-                    if (!votedPositions.includes(position)) {
-                        votedPositions.push(position);
-                        sessionStorage.setItem(votedKey, JSON.stringify(votedPositions));
-                    }
-                });
-            });
-        });
-    </script>
-    
-
-
 </body>
 </html>

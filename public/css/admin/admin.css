@@ -1174,6 +1174,25 @@ nav :where(form) :where(hr) {
             border: none;
             box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5), -.5px -.5px 0.5px rgba(0, 0, 0, 0.5);
         }
+
+        select {
+            height: 40px;
+            width: 200px;
+            background: var(--color-eight-form-container);
+
+            border: none; 
+            border-radius: 6px; 
+             
+            padding: 0px 10px;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5), -.5px -.5px 0.5px rgba(0, 0, 0, 0.5);
+            outline: none; 
+            appearance: none;
+            
+            option {
+                background-color: #fff; 
+                color: #333;
+            }
+        }
     }
 
     .alert-form {
@@ -1298,6 +1317,75 @@ nav :where(form) :where(hr) {
         align-items: center;
         gap: 8px;
     }
+}
+
+.user-container :where(.user-container-main) :where(.delete-container) {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--color-two-card-template);
+    padding: 20px 30px;
+    border-radius: 10px;
+    z-index: 100;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    p {
+        color: var(--text-color-primary);
+        font-size: 16px;
+    }
+}
+
+.user-container :where(.user-container-main) :where(.delete-container) :where(form) {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+
+    button {
+        color: var(--color-accent-primary);
+        background: transparent;
+        width: 150px;
+        height: 40px;
+        font-size: 16px;
+
+        border: none;
+
+        cursor: pointer;
+    }
+
+    .no {
+        background: #991B1B;
+        color: var(--color-two-card-template);
+
+        border: none;
+        border-radius: 8px;
+
+        box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .delete {
+        background: var(--color-accent-primary);
+        color: var(--color-two-card-template);
+
+        border: none;
+        border-radius: 8px;
+
+        box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+    } 
 }
 
 .user-container :where(.user-container-main) :where(.table-wrapper) {

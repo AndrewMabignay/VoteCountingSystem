@@ -69,12 +69,25 @@
     }
 
     if (isset($_POST['userDelete'])) {
+        $deleteUserId = $_POST['userId'];   
+        $deleteUserUsername = $_POST['userUsername'];
+    }
+
+    if (isset($_POST['noDelete'])) {
+        echo 'deleted';
+
+        unset($deleteUserId);
+    }
+
+    if (isset($_POST['delete'])) {
         $deleteUserId = $_POST['userId'];
-    
+
         require_once '../function/Model.php';
         $deleteUser = new Model();
         $deleteUser->setDatabaseTable('accounts');
         $deleteUser->deleteUser($deleteUserId);
+        
+        unset($deleteUserId);
     }
 
     if (isset($_POST['refresh'])) {
@@ -292,6 +305,19 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- DELETE FORM -->
+        <?php if (isset($deleteUserId)): ?>
+            <div class="overlay"></div>
+            <div class="delete-container">
+                <p>Are you sure you want to delete this <?php echo isset($deleteUserUsername) ? $deleteUserUsername : '' ?>?</p>
+                <form action="adminPanel.php?page=users" method="POST">
+                    <input type="hidden" value="<?php echo $deleteUserId ?>" name="userId">
+                    <button name="noDelete" class="no">No</button>
+                    <button name="delete" class="delete">Yes</button>
+                </form>
+            </div>
+        <?php endif; ?>
 
         <!-- ADD FORM -->
         <?php if (isset($addUser) && $addUser == true): ?>
