@@ -176,26 +176,26 @@ class Model {
         $this->query = "
             SELECT *
             FROM (
-                SELECT 
-                    c.*, 
-                    RANK() OVER (PARTITION BY c.Position ORDER BY c.VoteCount DESC) AS Ranking
-                FROM {$this->databaseTable} c
+                SELECT
+                    c.*,
+                    DENSE_RANK() OVER (PARTITION BY c.Position ORDER BY c.VoteCount DESC) AS Ranking
+                FROM candidates c
             ) AS ranked
-            WHERE 
+            WHERE
                 CASE
                     WHEN ranked.Position = 'Senator' THEN ranked.Ranking <= 12
-                    WHEN ranked.Position = 'Counsilor' THEN ranked.Ranking <= 10
+                    WHEN ranked.Position = 'Counselor' THEN ranked.Ranking <= 10
                     WHEN ranked.Position = 'President' THEN ranked.Ranking = 1
                     ELSE ranked.Ranking = 1
                 END
-            ORDER BY 
+            ORDER BY
                 CASE ranked.Position
                     WHEN 'President' THEN 1
                     WHEN 'Senator' THEN 2
                     WHEN 'Counselor' THEN 3
                     ELSE 999
                 END,
-                ranked.Ranking
+                ranked.Ranking;
         ";
 
         $retrieve = mysqli_query($conn, $this->query);
@@ -236,26 +236,26 @@ class Model {
         $this->query = "
             SELECT *
             FROM (
-                SELECT 
-                    c.*, 
-                    RANK() OVER (PARTITION BY c.Position ORDER BY c.VoteCount DESC) AS Ranking
-                FROM {$this->databaseTable} c
+                SELECT
+                    c.*,
+                    DENSE_RANK() OVER (PARTITION BY c.Position ORDER BY c.VoteCount DESC) AS Ranking
+                FROM candidates c
             ) AS ranked
-            WHERE 
+            WHERE
                 CASE
                     WHEN ranked.Position = 'Senator' THEN ranked.Ranking <= 12
-                    WHEN ranked.Position = 'Counsilor' THEN ranked.Ranking <= 10
+                    WHEN ranked.Position = 'Counselor' THEN ranked.Ranking <= 10
                     WHEN ranked.Position = 'President' THEN ranked.Ranking = 1
                     ELSE ranked.Ranking = 1
                 END AND ranked.Name LIKE '%{$input}%'
-            ORDER BY 
+            ORDER BY
                 CASE ranked.Position
                     WHEN 'President' THEN 1
                     WHEN 'Senator' THEN 2
                     WHEN 'Counselor' THEN 3
                     ELSE 999
                 END,
-                ranked.Ranking
+                ranked.Ranking;
         ";
 
         $retrieve = mysqli_query($conn, $this->query);
@@ -478,7 +478,7 @@ class Model {
     //     return $stmt->fetchAll(PDO::FETCH_ASSOC);
     // }  
     
-    public function castVote($accountID, $candidateID, $position) {
+    public function castVote($accountID, $candidateID, $position, $voteCount) {
         global $conn;
 
         $positionLimits = [
@@ -512,9 +512,10 @@ class Model {
             $statement->close();
     
             // Step 4: Update vote count in candidates table
-            $this->query = "UPDATE candidates SET VoteCount = VoteCount + 1 WHERE ID = ?";
+            $this->query = "UPDATE candidates SET VoteCount = ? WHERE ID = ?";
             $statement = $conn->prepare($this->query);
-            $statement->bind_param('i', $candidateID);
+            $voteCountNew = $voteCount + 1;
+            $statement->bind_param('ii', $candidateID, $voteCountNew);
             $statement->execute();
             $statement->close();
     

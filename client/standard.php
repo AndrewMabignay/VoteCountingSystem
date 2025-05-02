@@ -32,7 +32,7 @@ if (isset($_POST['vote'])) {
 
     // Insert vote logic
     $voteCountAdded = new Model();
-    $voteCountAdded->castVote($accountID, $id, $position, $positionLimits);
+    $voteCountAdded->castVote($accountID, $id, $position, $voteCount);
 }
 
 // Get list of candidates
@@ -112,5 +112,13 @@ $votedCandidateIDs = $listCandidates->getUserVotedCandidateIDs($accountID);
     </div>
 
     <script src="../public/js/status.js"></script>
+
+    <!-- <script>
+        window.addEventListener("pageshow", function(event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        });
+    </script> -->
 </body>
 </html>

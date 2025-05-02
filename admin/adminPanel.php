@@ -90,5 +90,13 @@ if (isset($_POST['status']) || $page == 'status') {
     </script>
 
     <script src="../public/js/status.js"></script>
+
+    <!-- <script>
+        window.addEventListener("pageshow", function(event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        });
+    </script> -->
 </body>
 </html>
