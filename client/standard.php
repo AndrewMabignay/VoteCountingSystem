@@ -30,6 +30,8 @@ if (isset($_POST['vote'])) {
     $voteCount = $_POST['voteCount'];
     $position = $_POST['position'];
 
+    // echo $voteCount;
+
     // Insert vote logic
     $voteCountAdded = new Model();
     $voteCountAdded->castVote($accountID, $id, $position, $voteCount);

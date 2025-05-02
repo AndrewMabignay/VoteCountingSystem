@@ -178,7 +178,7 @@ class Model {
             FROM (
                 SELECT
                     c.*,
-                    DENSE_RANK() OVER (PARTITION BY c.Position ORDER BY c.VoteCount DESC) AS Ranking
+                    RANK() OVER (PARTITION BY c.Position ORDER BY c.VoteCount DESC) AS Ranking
                 FROM candidates c
             ) AS ranked
             WHERE
@@ -195,7 +195,7 @@ class Model {
                     WHEN 'Counselor' THEN 3
                     ELSE 999
                 END,
-                ranked.Ranking;
+                ranked.Ranking;        
         ";
 
         $retrieve = mysqli_query($conn, $this->query);
@@ -238,7 +238,7 @@ class Model {
             FROM (
                 SELECT
                     c.*,
-                    DENSE_RANK() OVER (PARTITION BY c.Position ORDER BY c.VoteCount DESC) AS Ranking
+                    RANK() OVER (PARTITION BY c.Position ORDER BY c.VoteCount DESC) AS Ranking
                 FROM candidates c
             ) AS ranked
             WHERE
@@ -255,7 +255,7 @@ class Model {
                     WHEN 'Counselor' THEN 3
                     ELSE 999
                 END,
-                ranked.Ranking;
+                ranked.Ranking;        
         ";
 
         $retrieve = mysqli_query($conn, $this->query);
@@ -515,7 +515,7 @@ class Model {
             $this->query = "UPDATE candidates SET VoteCount = ? WHERE ID = ?";
             $statement = $conn->prepare($this->query);
             $voteCountNew = $voteCount + 1;
-            $statement->bind_param('ii', $candidateID, $voteCountNew);
+            $statement->bind_param('ii', $voteCountNew, $candidateID);
             $statement->execute();
             $statement->close();
     
